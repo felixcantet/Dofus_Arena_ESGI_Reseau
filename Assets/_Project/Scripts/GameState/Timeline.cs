@@ -8,6 +8,7 @@ public class Timeline
     {
         timeline = new Queue<Character>();
     }
+    
     public Timeline(List<Team> teams)
     {
         timeline = new Queue<Character>();
@@ -37,6 +38,8 @@ public class Timeline
         this.timeline.Enqueue(this.timeline.Dequeue());
         //ActiveCharacter.GetComponent<Renderer>().material.color = Color.red;
         Debug.Log(ActiveCharacter.name);
+        
+        ActiveCharacter.SearchMoveableTile();
     }
 
 }

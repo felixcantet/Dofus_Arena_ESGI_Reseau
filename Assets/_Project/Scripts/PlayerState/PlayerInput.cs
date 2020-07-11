@@ -7,6 +7,7 @@ using Photon.Pun;
 public class PlayerInput : MonoBehaviour
 {
     public Camera camera;
+    
     public static bool IsLocalPlayerActiveCharacter
     {
         get
@@ -19,28 +20,39 @@ public class PlayerInput : MonoBehaviour
     {
         if (!BattleManager.battleStart)
             return;
-        Debug.LogError("Is Active Player : " + IsLocalPlayerActiveCharacter);
+        
+        Debug.LogWarning("Is Active Player : " + IsLocalPlayerActiveCharacter);
+        
         if (IsLocalPlayerActiveCharacter)
         {
+            if (BattleManager.Instance.timeline.ActiveCharacter.isMoving)
+                return;
+            
             var tile = GetTileUnderMouse();
+            
             foreach(var item in MapManager.Instance.map)
             {
-                item.SetColor(Color.white);
+                if(BattleManager.Instance.timeline.ActiveCharacter.moveableTiles.Contains(item))
+                    item.SetColor(Color.yellow);
+                else
+                    item.SetColor(Color.white);
             }
 
             var startTile = BattleManager.Instance.timeline.ActiveCharacter.position;
-            if (Input.GetMouseButtonDown(0))
+            
+            if (Input.GetMouseButtonDown(0) && tile != null)
             {
                 var path = MapManager.GetPath(startTile, tile);
                 BattleManager.Instance.timeline.ActiveCharacter.StartCoroutine(BattleManager.Instance.timeline.ActiveCharacter.MoveToTile(path));
             }
-            if (tile != null)
+            
+            if (tile != null && BattleManager.Instance.timeline.ActiveCharacter.PlayerStats.PM > 0)
             {
                 var path = MapManager.GetPath(startTile, tile);
                 Debug.Log(path.Count);
                 while(path.Count != 0)
                 {
-                    path.Pop().SetColor(Color.red);
+                    path.Pop().SetColor(Color.cyan);
                 }
             }
         }
@@ -54,6 +66,10 @@ public class PlayerInput : MonoBehaviour
         if(Physics.Raycast(ray, out hit, layerMask))
         {
             var tile = hit.transform.GetComponent<Tile>();
+
+            if (!BattleManager.Instance.timeline.ActiveCharacter.moveableTiles.Contains(tile))
+                return null;
+                
             return tile;
         }
         return null;

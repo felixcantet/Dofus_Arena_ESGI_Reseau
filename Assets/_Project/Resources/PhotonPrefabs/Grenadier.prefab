@@ -1363,6 +1363,7 @@ MonoBehaviour:
   OwnershipTransfer: 0
   ObservedComponents:
   - {fileID: 2256451894302654760}
+  - {fileID: 66403236249220905}
   viewIdField: 0
   InstantiationId: 0
   isRuntimeInstantiated: 0
@@ -1399,7 +1400,11 @@ MonoBehaviour:
     PA: 6
     currentLife: 0
     maxLife: 200
+    defaultPM: 4
+    defaultPA: 6
   position: {fileID: 0}
+  moveableTiles: []
+  isMoving: 0
 --- !u!136 &2459390820894299742
 CapsuleCollider:
   m_ObjectHideFlags: 0
