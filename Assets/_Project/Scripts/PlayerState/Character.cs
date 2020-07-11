@@ -105,9 +105,16 @@ public class Character : MonoBehaviourPun, IPunObservable
 
         Tile tmp = this.position;
         
+        BattleManager.Instance.photonView.RPC("DisplayTextEffect", RpcTarget.AllBuffered, transform.position,
+            0.0f,
+            0.78f,
+            0.25f,
+            path.Count + " PM");
+        
         float moveSpeed = 0.5f;
         var currentTarget = path.Pop();
         float pos = 0.0f;
+        
         
         while(stats.PM > 0)
         {
@@ -180,6 +187,12 @@ public class Character : MonoBehaviourPun, IPunObservable
         currentState = CharacterState.ATTACK_PROCESS;
         PlayerStats.PA -= 3;
         StartCoroutine(nameof(DelayAttack));
+        
+        BattleManager.Instance.photonView.RPC("DisplayTextEffect", RpcTarget.AllBuffered, transform.position,
+            0.0f,
+            0.25f,
+            0.78f,
+            3 + " PA");
     }
 
     IEnumerator DelayAttack()
