@@ -144,7 +144,10 @@ public class PlayerInput : MonoBehaviour
 
             if (!BattleManager.Instance.timeline.ActiveCharacter.moveableTiles.Contains(tile))
                 return null;
-                
+
+            if (tile.used)
+                return null;
+            
             return tile;
         }
         return null;

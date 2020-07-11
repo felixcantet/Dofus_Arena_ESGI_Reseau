@@ -128,6 +128,9 @@ public class MapManager : NetworkSingleton<MapManager>, IPunObservable
             if (tiles.Contains(tile))
                 continue;
             
+            if(tile.used)
+                continue;
+            
             tiles.Add(tile);
         }
         
