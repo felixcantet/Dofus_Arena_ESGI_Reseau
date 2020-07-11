@@ -5,7 +5,7 @@ using Sirenix.OdinInspector;
 using Photon.Pun;
 public class Character : MonoBehaviourPun, IPunObservable
 {
-    public string name;
+    public string name = "IronMan";
     [SerializeField] Stats stats;
     public Tile position;
     public Stats PlayerStats
