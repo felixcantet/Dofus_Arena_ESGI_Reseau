@@ -46,6 +46,13 @@ public class Character : MonoBehaviourPun, IPunObservable
     public void Damage(int damage)
     {
         this.PlayerStats.currentLife -= damage;
+        
+        if (this.PlayerStats.currentLife <= 0)
+        {
+            currentState = CharacterState.DEAD;
+            this.gameObject.SetActive(false);
+            BattleManager.Instance.timeline.RemoveCharacterFromTimeline(this);
+        }
     }
 
     [PunRPC]
@@ -82,7 +89,7 @@ public class Character : MonoBehaviourPun, IPunObservable
             if(!attackState)
                 i.SetColor(Color.yellow);
             else
-                i.SetColor(Color.magenta);
+                i.SetColor(new Color(1, 0.6f, 1, 1));
         }
     }
     
@@ -146,10 +153,10 @@ public class Character : MonoBehaviourPun, IPunObservable
 
     public void SwitchToAttackStateToStaticState()
     {
-        currentState = currentState == CharacterState.ATTACK ? CharacterState.STATIC : CharacterState.ATTACK;
+        currentState = currentState == CharacterState.ATTACK_MODE ? CharacterState.STATIC : CharacterState.ATTACK_MODE;
         switch (currentState)
         {
-            case CharacterState.ATTACK:
+            case CharacterState.ATTACK_MODE:
                 SearchMoveableTile(2, true);
                 break;
             
@@ -159,11 +166,33 @@ public class Character : MonoBehaviourPun, IPunObservable
         }
         
     }
+
+    public void SetAttackProcess()
+    {
+        if (!photonView.IsMine)
+            return;
+            
+        currentState = CharacterState.ATTACK_PROCESS;
+        PlayerStats.PA -= 3;
+        StartCoroutine(nameof(DelayAttack));
+    }
+
+    IEnumerator DelayAttack()
+    {
+        yield return new WaitForSeconds(1.5f);
+
+        currentState = CharacterState.STATIC;
+        SearchMoveableTile(stats.PM);
+        
+        yield break;
+    }
 }
 
 public enum CharacterState
 {
     STATIC,
     MOVE,
-    ATTACK
+    ATTACK_MODE,
+    ATTACK_PROCESS,
+    DEAD
 }

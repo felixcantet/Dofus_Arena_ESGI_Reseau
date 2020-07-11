@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using Photon.Pun;
 using UnityEngine;
 
 public class Timeline
@@ -42,4 +43,30 @@ public class Timeline
         ActiveCharacter.SearchMoveableTile(ActiveCharacter.PlayerStats.PM);
     }
 
+    public void RemoveCharacterFromTimeline(Character die)
+    {
+        var tmp = timeline.ToArray();
+        timeline.Clear();
+
+        for (int i = 0; i < tmp.Length; i++)
+        {
+            if (tmp[i] == die)
+                continue;
+            
+            timeline.Enqueue(tmp[i]);
+        }
+
+        if (ActiveCharacter == die)
+        {
+            if (BattleManager.Instance.timeline.ActiveCharacter.photonView.IsMine)
+            {
+                // foreach(var item in MapManager.Instance.map)
+                // {
+                //     item.SetColor(Color.white);
+                // }
+            
+                BattleManager.Instance.photonView.RPC("SetNextTurn", RpcTarget.AllBuffered);
+            }
+        }
+    }
 }

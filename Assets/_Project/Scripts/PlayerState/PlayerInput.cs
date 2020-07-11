@@ -62,7 +62,7 @@ public class PlayerInput : MonoBehaviour
                     
                     break;
                 
-                case CharacterState.ATTACK:
+                case CharacterState.ATTACK_MODE:
                     if (Input.GetMouseButtonDown(1))
                     {
                         BattleManager.Instance.timeline.ActiveCharacter.SwitchToAttackStateToStaticState();
@@ -71,7 +71,7 @@ public class PlayerInput : MonoBehaviour
                     foreach(var item in MapManager.Instance.map)
                     {
                         if(BattleManager.Instance.timeline.ActiveCharacter.moveableTiles.Contains(item))
-                            item.SetColor(Color.magenta);
+                            item.SetColor(new Color(1, 0.6f, 1, 1));
                         else
                             item.SetColor(Color.white);
                     }
@@ -80,7 +80,42 @@ public class PlayerInput : MonoBehaviour
                     if (tileAtck != null)
                     {
                         tileAtck.SetColor(Color.red);
+                        if (Input.GetMouseButtonDown(0))
+                        {
+                            if (BattleManager.Instance.timeline.ActiveCharacter.PlayerStats.PA < 3)
+                            {
+                                BattleManager.Instance.timeline.ActiveCharacter.SwitchToAttackStateToStaticState();
+                                return;
+                            }
+                            
+                            Character c = null;
+                            foreach (var team in BattleManager.Instance.teams)
+                            {
+                                foreach (var chara in team.characters)
+                                {
+                                    if (chara.position == tileAtck)
+                                    {
+                                        c = chara;
+                                        break;
+                                    }
+                                }
+
+                                if (c != null)
+                                    break;
+                            }
+
+                            if (c != null)
+                            {
+                                PhotonNetwork.GetPhotonView(c.photonView.ViewID).RPC("Damage", RpcTarget.AllBuffered, 100);
+                            }
+                            
+                            BattleManager.Instance.timeline.ActiveCharacter.SetAttackProcess();
+                        }
                     }
+                    break;
+                
+                case CharacterState.ATTACK_PROCESS:
+                    
                     break;
             }
             
@@ -107,4 +142,5 @@ public class PlayerInput : MonoBehaviour
         }
         return null;
     }
+    
 }
