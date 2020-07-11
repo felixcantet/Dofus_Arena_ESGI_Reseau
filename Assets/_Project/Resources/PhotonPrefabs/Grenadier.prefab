@@ -1402,6 +1402,8 @@ MonoBehaviour:
     maxLife: 200
     defaultPM: 4
     defaultPA: 6
+    attackRange: 2
+    damage: 50
   position: {fileID: 0}
   moveableTiles: []
   currentState: 0

@@ -45,6 +45,11 @@ public class Character : MonoBehaviourPun, IPunObservable
     [PunRPC]
     public void Damage(int damage)
     {
+        //TextEffect t = Instantiate(BattleManager.Instance.textEffectPrefab, transform.position + Vector3.up * 1.5f,
+        //    BattleManager.Instance.textEffectPrefab.transform.rotation);
+       // t.text.text = "- " + damage.ToString();
+        
+        
         this.PlayerStats.currentLife -= damage;
         
         if (this.PlayerStats.currentLife <= 0)
@@ -157,7 +162,7 @@ public class Character : MonoBehaviourPun, IPunObservable
         switch (currentState)
         {
             case CharacterState.ATTACK_MODE:
-                SearchMoveableTile(2, true);
+                SearchMoveableTile(stats.ATTAQUE_RANGE, true);
                 break;
             
             case CharacterState.STATIC:

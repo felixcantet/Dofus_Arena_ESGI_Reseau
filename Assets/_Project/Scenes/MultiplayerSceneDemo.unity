@@ -3440,6 +3440,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 419f7092da2c7034e8c5de5eb356a541, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  textEffectPrefab: {fileID: 5916755043464383062, guid: c0faa0e6f8f2eef458f31c104bba4c72,
+    type: 3}
   teams: []
 --- !u!114 &302143477
 MonoBehaviour:

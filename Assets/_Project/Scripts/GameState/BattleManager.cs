@@ -3,9 +3,12 @@ using System.Collections.Generic;
 using UnityEngine;
 using Photon.Pun;
 using Sirenix.OdinInspector;
+using Sirenix.Serialization;
 
 public class BattleManager : NetworkSingleton<BattleManager>, IPunObservable
 {
+    public TextEffect textEffectPrefab;
+    
     public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
     {
     }
@@ -50,5 +53,14 @@ public class BattleManager : NetworkSingleton<BattleManager>, IPunObservable
         timeline.ActiveCharacter.PlayerStats.PA = timeline.ActiveCharacter.PlayerStats.DEFAULT_PA;
         
         this.timeline.SetNextTurn();
+    }
+
+    [PunRPC]
+    public void DisplayTextEffect(Vector3 pos, float r, float g, float b, string txt)
+    {
+        TextEffect t = Instantiate(BattleManager.Instance.textEffectPrefab, pos + Vector3.up * 1.5f,
+            BattleManager.Instance.textEffectPrefab.transform.rotation);
+        t.displayColor = new Color(r, g, b, 0.0f);
+        t.text.text = txt;
     }
 }

@@ -106,7 +106,14 @@ public class PlayerInput : MonoBehaviour
 
                             if (c != null)
                             {
-                                PhotonNetwork.GetPhotonView(c.photonView.ViewID).RPC("Damage", RpcTarget.AllBuffered, 100);
+                                PhotonNetwork.GetPhotonView(c.photonView.ViewID).RPC("Damage", 
+                                    RpcTarget.AllBuffered, BattleManager.Instance.timeline.ActiveCharacter.PlayerStats.DAMAGE);
+                                
+                                BattleManager.Instance.photonView.RPC("DisplayTextEffect", RpcTarget.AllBuffered, c.transform.position,
+                                    BattleManager.Instance.textEffectPrefab.displayColor.r,
+                                    BattleManager.Instance.textEffectPrefab.displayColor.g,
+                                    BattleManager.Instance.textEffectPrefab.displayColor.b,
+                                    "- " +  BattleManager.Instance.timeline.ActiveCharacter.PlayerStats.DAMAGE.ToString());
                             }
                             
                             BattleManager.Instance.timeline.ActiveCharacter.SetAttackProcess();
