@@ -113,7 +113,7 @@ public class PlayerInput : MonoBehaviour
                                     BattleManager.Instance.textEffectPrefab.displayColor.r,
                                     BattleManager.Instance.textEffectPrefab.displayColor.g,
                                     BattleManager.Instance.textEffectPrefab.displayColor.b,
-                                    "- " +  BattleManager.Instance.timeline.ActiveCharacter.PlayerStats.DAMAGE.ToString());
+                                    "-" +  BattleManager.Instance.timeline.ActiveCharacter.PlayerStats.DAMAGE.ToString());
                             }
                             
                             BattleManager.Instance.timeline.ActiveCharacter.SetAttackProcess();

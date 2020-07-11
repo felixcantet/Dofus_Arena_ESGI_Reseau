@@ -109,7 +109,7 @@ public class Character : MonoBehaviourPun, IPunObservable
             0.0f,
             0.78f,
             0.25f,
-            path.Count + " PM");
+            "-" + path.Count + " PM");
         
         float moveSpeed = 0.5f;
         var currentTarget = path.Pop();
@@ -192,7 +192,7 @@ public class Character : MonoBehaviourPun, IPunObservable
             0.0f,
             0.25f,
             0.78f,
-            3 + " PA");
+            "-" + 3 + " PA");
     }
 
     IEnumerator DelayAttack()
