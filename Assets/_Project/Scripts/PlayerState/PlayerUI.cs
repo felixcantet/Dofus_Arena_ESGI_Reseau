@@ -16,6 +16,7 @@ public class PlayerUI : MonoBehaviour
     
     public void NextTurn()
     {
+        selectedCharacter = -1;
         if (BattleManager.Instance.timeline.ActiveCharacter.photonView.IsMine)
         {
             foreach(var item in MapManager.Instance.map)
@@ -49,21 +50,43 @@ public class PlayerUI : MonoBehaviour
         
         if (BattleManager.Instance.timeline.ActiveCharacter.photonView.IsMine)
         {
-            nameText.text = BattleManager.Instance.timeline.ActiveCharacter.name;
-            lifeText.text = BattleManager.Instance.timeline.ActiveCharacter.PlayerStats.currentLife + " PV";
-            paText.text = BattleManager.Instance.timeline.ActiveCharacter.PlayerStats.PA + " PA";
-            pmText.text = BattleManager.Instance.timeline.ActiveCharacter.PlayerStats.PM + " PM";
             
-            if (selectedCharacter != -1)
+            if (selectedCharacter >= 0)
             {
-                nameText.text = "Zerma g click";
+                Character c = BattleManager.Instance.teams[selectedCharacter > 2 ? 1 : 0]
+                    .characters[selectedCharacter > 2 ? selectedCharacter - 3 : selectedCharacter];
+                
+                nameText.text = c.name;
+                lifeText.text = c.PlayerStats.currentLife + " PV";
+                paText.text = c.PlayerStats.PA + " PA";
+                pmText.text = c.PlayerStats.PM + " PM";
+            }
+            else
+            {
+                nameText.text = BattleManager.Instance.timeline.ActiveCharacter.name;
+                lifeText.text = BattleManager.Instance.timeline.ActiveCharacter.PlayerStats.currentLife + " PV";
+                paText.text = BattleManager.Instance.timeline.ActiveCharacter.PlayerStats.PA + " PA";
+                pmText.text = BattleManager.Instance.timeline.ActiveCharacter.PlayerStats.PM + " PM";
             }
         }
         else
         {
-            if (selectedCharacter != -1)
+            if (selectedCharacter >= 0)
             {
-                nameText.text = "Zerma g click";
+                Character c = BattleManager.Instance.teams[selectedCharacter > 2 ? 1 : 0]
+                    .characters[selectedCharacter > 2 ? selectedCharacter - 3 : selectedCharacter];
+                
+                nameText.text = c.name;
+                lifeText.text = c.PlayerStats.currentLife + " PV";
+                paText.text = c.PlayerStats.PA + " PA";
+                pmText.text = c.PlayerStats.PM + " PM";
+            }
+            else
+            {
+                nameText.text = " - ";
+                lifeText.text = " PV";
+                paText.text = " PA";
+                pmText.text = " PM";
             }
         }
         
