@@ -3611,7 +3611,7 @@ MonoBehaviour:
     defaultPA: 6
   position: {fileID: 0}
   moveableTiles: []
-  isMoving: 0
+  currentState: 0
 --- !u!136 &3983352244231256067
 CapsuleCollider:
   m_ObjectHideFlags: 0

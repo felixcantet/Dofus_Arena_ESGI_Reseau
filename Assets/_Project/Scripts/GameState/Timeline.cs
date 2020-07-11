@@ -39,7 +39,7 @@ public class Timeline
         //ActiveCharacter.GetComponent<Renderer>().material.color = Color.red;
         Debug.Log(ActiveCharacter.name);
         
-        ActiveCharacter.SearchMoveableTile();
+        ActiveCharacter.SearchMoveableTile(ActiveCharacter.PlayerStats.PM);
     }
 
 }

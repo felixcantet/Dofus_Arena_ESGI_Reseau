@@ -16,7 +16,7 @@ public class Character : MonoBehaviourPun, IPunObservable
     
     public List<Tile> moveableTiles = new List<Tile>();
 
-    public bool isMoving = false;
+    public CharacterState currentState = CharacterState.STATIC;
     
     public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
     {
@@ -64,28 +64,31 @@ public class Character : MonoBehaviourPun, IPunObservable
         this.stats.currentLife = this.stats.MAX_LIFE;
     }
 
-    public void SearchMoveableTile()
+    public void SearchMoveableTile(int range, bool attackState = false)
     {
         if (!photonView.IsMine)
             return;
 
-        if (stats.PM <= 0)
+        if (stats.PM <= 0 && !attackState)
         {
             moveableTiles = new List<Tile>();
             return;
         }
         
-        moveableTiles = MapManager.GetTilesInRange(position, stats.PM);
+        moveableTiles = MapManager.GetTilesInRange(position, range, attackState);
 
         foreach (var i in moveableTiles)
         {
-            i.SetColor(Color.yellow);
+            if(!attackState)
+                i.SetColor(Color.yellow);
+            else
+                i.SetColor(Color.magenta);
         }
     }
     
     public IEnumerator MoveToTile(Stack<Tile> path)
     {
-        isMoving = true;
+        currentState = CharacterState.MOVE;
         position.used = false;
 
         Tile tmp = this.position;
@@ -119,12 +122,12 @@ public class Character : MonoBehaviourPun, IPunObservable
             yield return 0;
         }
 
-        isMoving = false;
+        currentState = CharacterState.STATIC;
 
         var tileID = tmp.photonView.ViewID;
         PhotonNetwork.GetPhotonView(photonView.ViewID).RPC("SetCurrentTile", RpcTarget.AllBuffered, tileID);
         
-        SearchMoveableTile();
+        SearchMoveableTile(stats.PM);
         
         yield break;
     }
@@ -141,4 +144,26 @@ public class Character : MonoBehaviourPun, IPunObservable
         return null;
     }
 
+    public void SwitchToAttackStateToStaticState()
+    {
+        currentState = currentState == CharacterState.ATTACK ? CharacterState.STATIC : CharacterState.ATTACK;
+        switch (currentState)
+        {
+            case CharacterState.ATTACK:
+                SearchMoveableTile(2, true);
+                break;
+            
+            case CharacterState.STATIC:
+                SearchMoveableTile(stats.PM);
+                break;
+        }
+        
+    }
+}
+
+public enum CharacterState
+{
+    STATIC,
+    MOVE,
+    ATTACK
 }

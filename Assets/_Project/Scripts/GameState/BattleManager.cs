@@ -40,7 +40,7 @@ public class BattleManager : NetworkSingleton<BattleManager>, IPunObservable
         this.timeline = new Timeline(teams);
         battleStart = true;
         
-        timeline.ActiveCharacter.SearchMoveableTile();
+        timeline.ActiveCharacter.SearchMoveableTile(timeline.ActiveCharacter.PlayerStats.PM);
     }
     
     [PunRPC]

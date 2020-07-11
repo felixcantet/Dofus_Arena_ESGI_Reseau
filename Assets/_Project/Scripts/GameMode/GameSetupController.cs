@@ -40,8 +40,8 @@ public class GameSetupController : MonoBehaviour
             {
                 pos = spawnPosition.spawnPositionTeam2[i].position;
                 targetTile = spawnPosition.spawnPositionTeam2[i].GetComponent<Tile>();
-
             }
+            
             var go = PhotonNetwork.Instantiate(paths[i], pos + Vector3.up * 0.5f, Quaternion.identity);
             var id = go.GetPhotonView().ViewID;
             team.charactersID.Add(id);

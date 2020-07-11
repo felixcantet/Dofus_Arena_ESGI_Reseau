@@ -118,7 +118,7 @@ public class MapManager : NetworkSingleton<MapManager>, IPunObservable
         return path;
     }
 
-    public static List<Tile> GetTilesInRange(Tile startPos, int range)
+    public static List<Tile> GetTilesInRange(Tile startPos, int range, bool rangeForAttack = false)
     {
         List<Tile> tiles = new List<Tile>();
         tiles.Add(startPos);
@@ -131,8 +131,6 @@ public class MapManager : NetworkSingleton<MapManager>, IPunObservable
             tiles.Add(tile);
         }
         
-        // int cal = startPos.position.x + startPos.position.y;
-
         for (int i = 0; i < tiles.Count; i++)
         {
             foreach (var neig in tiles[i].neighbours)
@@ -140,12 +138,10 @@ public class MapManager : NetworkSingleton<MapManager>, IPunObservable
                 if (tiles.Contains(neig))
                     continue;
                 
-                if(neig.used)
-                    continue;
+                if(!rangeForAttack)
+                    if(neig.used)
+                        continue;
                 
-                //int tmpCal = neig.position.x + neig.position.y;
-                // dist = cal > tmpCal ? cal - tmpCal : tmpCal - cal;
-
                 int calX = neig.position.x > startPos.position.x
                     ? neig.position.x - startPos.position.x
                     : startPos.position.x - neig.position.x;
