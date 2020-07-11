@@ -5,10 +5,10 @@ using UnityEngine;
 [System.Serializable]
 public class Stats
 {
-    public int PM = 4;
-    public int PA = 6;
+    [HideInInspector] public int PM = 4;
+    [HideInInspector] public int PA = 6;
 
-    public int currentLife;
+    [HideInInspector] public int currentLife;
     
     [SerializeField] private int maxLife = 200;
     [SerializeField] private int defaultPM = 4;

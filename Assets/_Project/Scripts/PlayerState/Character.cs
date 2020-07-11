@@ -17,6 +17,8 @@ public class Character : MonoBehaviourPun, IPunObservable
     public List<Tile> moveableTiles = new List<Tile>();
 
     public CharacterState currentState = CharacterState.STATIC;
+
+    public GameObject activeEffect;
     
     public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
     {
@@ -158,6 +160,16 @@ public class Character : MonoBehaviourPun, IPunObservable
         return null;
     }
 
+    public void SetActiveCharacter(bool isActive = true)
+    {
+        //Enable effect
+        activeEffect.SetActive(isActive);
+        
+        //Search range
+        if(isActive)
+            SearchMoveableTile(PlayerStats.PM);
+    }
+    
     public void SwitchToAttackStateToStaticState()
     {
         currentState = currentState == CharacterState.ATTACK_MODE ? CharacterState.STATIC : CharacterState.ATTACK_MODE;

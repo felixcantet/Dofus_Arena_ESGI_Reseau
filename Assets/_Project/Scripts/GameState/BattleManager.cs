@@ -47,8 +47,8 @@ public class BattleManager : NetworkSingleton<BattleManager>, IPunObservable
     {
         this.timeline = new Timeline(teams);
         battleStart = true;
-        
-        timeline.ActiveCharacter.SearchMoveableTile(timeline.ActiveCharacter.PlayerStats.PM);
+
+        timeline.ActiveCharacter.SetActiveCharacter();//SearchMoveableTile(timeline.ActiveCharacter.PlayerStats.PM);
         
         bool finded = false;
         for (int i = 0; i < teams.Count; i++)
