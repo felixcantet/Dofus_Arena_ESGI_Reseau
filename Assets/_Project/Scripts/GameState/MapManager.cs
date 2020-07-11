@@ -118,7 +118,7 @@ public class MapManager : NetworkSingleton<MapManager>, IPunObservable
         return path;
     }
 
-    public static List<Tile> GetTilesInRange(Tile startPos, int range, bool rangeForAttack = false)
+    public static List<Tile> GetTilesInRange(Tile startPos, Vector2Int range, bool rangeForAttack = false)
     {
         List<Tile> tiles = new List<Tile>();
         tiles.Add(startPos);
@@ -154,7 +154,7 @@ public class MapManager : NetworkSingleton<MapManager>, IPunObservable
                 
                 Debug.Log("la tile se trouve a : " + dist + " pour X = " + calX + " et Y = " + calY);
                 
-                if (dist <= range)
+                if (dist <= range.y)
                 {
                     Debug.Log("j'ajoute la tile !");
                     tiles.Add(neig);
@@ -162,8 +162,29 @@ public class MapManager : NetworkSingleton<MapManager>, IPunObservable
             }
         }
 
-        tiles.Remove(startPos);
-
-        return tiles;
+        //tiles.Remove(startPos);
+        
+        List<Tile> finalTiles = new List<Tile>();
+        
+        foreach (var tile in tiles)
+        {
+            int calX = tile.position.x > startPos.position.x
+                ? tile.position.x - startPos.position.x
+                : startPos.position.x - tile.position.x;
+                
+            int calY = tile.position.y > startPos.position.y
+                ? tile.position.y - startPos.position.y
+                : startPos.position.y - tile.position.y;
+            
+            int dist = calX + calY;
+            
+            if (dist >= range.x)
+            {
+                Debug.Log("j'ajoute la tile !");
+                finalTiles.Add(tile);
+            }
+        }
+        
+        return finalTiles;
     }
 }

@@ -14,7 +14,7 @@ public class Stats
     [SerializeField] private int defaultPM = 4;
     [SerializeField] private int defaultPA = 6;
 
-    [SerializeField] private int attackRange = 2;
+    [SerializeField] private Vector2Int attackRange = new Vector2Int(1, 2);
 
     [SerializeField] private int damage = 50;
     
@@ -33,7 +33,7 @@ public class Stats
         get { return defaultPA; }
     }
 
-    public int ATTAQUE_RANGE
+    public Vector2Int ATTAQUE_RANGE
     {
         get { return attackRange; }
     }

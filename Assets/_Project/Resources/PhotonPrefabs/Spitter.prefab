@@ -4900,7 +4900,7 @@ MonoBehaviour:
     maxLife: 200
     defaultPM: 4
     defaultPA: 6
-    attackRange: 2
+    attackRange: {x: 2, y: 8}
     damage: 50
   position: {fileID: 0}
   moveableTiles: []

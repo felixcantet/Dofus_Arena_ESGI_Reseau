@@ -73,7 +73,7 @@ public class Character : MonoBehaviourPun, IPunObservable
         this.stats.currentLife = this.stats.MAX_LIFE;
     }
 
-    public void SearchMoveableTile(int range, bool attackState = false)
+    public void SearchMoveableTile(Vector2Int range, bool attackState = false)
     {
         if (!photonView.IsMine)
             return;
@@ -143,7 +143,7 @@ public class Character : MonoBehaviourPun, IPunObservable
         var tileID = tmp.photonView.ViewID;
         PhotonNetwork.GetPhotonView(photonView.ViewID).RPC("SetCurrentTile", RpcTarget.AllBuffered, tileID);
         
-        SearchMoveableTile(stats.PM);
+        SearchMoveableTile(new Vector2Int(1, stats.PM));
         
         yield break;
     }
@@ -167,7 +167,7 @@ public class Character : MonoBehaviourPun, IPunObservable
         
         //Search range
         if(isActive)
-            SearchMoveableTile(PlayerStats.PM);
+            SearchMoveableTile(new Vector2Int(1, stats.PM));
     }
     
     public void SwitchToAttackStateToStaticState()
@@ -180,7 +180,7 @@ public class Character : MonoBehaviourPun, IPunObservable
                 break;
             
             case CharacterState.STATIC:
-                SearchMoveableTile(stats.PM);
+                SearchMoveableTile(new Vector2Int(1, stats.PM));
                 break;
         }
         
@@ -207,7 +207,7 @@ public class Character : MonoBehaviourPun, IPunObservable
         yield return new WaitForSeconds(1.5f);
 
         currentState = CharacterState.STATIC;
-        SearchMoveableTile(stats.PM);
+        SearchMoveableTile(new Vector2Int(1, stats.PM));
         
         yield break;
     }
