@@ -4,16 +4,40 @@ using System.Collections.Generic;
 using UnityEngine;
 using Photon.Pun;
 using TMPro;
+using UnityEngine.UI;
 
 public class PlayerUI : MonoBehaviour
 {
+    [Header("Character Text")]
+    public TextMeshProUGUI[] teamA = new TextMeshProUGUI[0];
+    public TextMeshProUGUI[] teamB = new TextMeshProUGUI[0];
+    
+    [Header("Panel Info")]
     public TextMeshProUGUI lifeText;
     public TextMeshProUGUI nameText;
     public TextMeshProUGUI pmText;
     public TextMeshProUGUI paText;
 
     private int selectedCharacter = -1;
-    
+
+    private IEnumerator Start()
+    {
+        while (BattleManager.Instance.teams.Count < 2)
+        {
+            yield return new WaitForSeconds(0.01f);
+        }
+
+        for (int i = 0; i < teamA.Length; i++)
+        {
+            teamA[i].text = BattleManager.Instance.teams[0].characters[i].name;
+        }
+        
+        for (int i = 0; i < teamB.Length; i++)
+        {
+            teamB[i].text = BattleManager.Instance.teams[1].characters[i].name;
+        }
+    }
+
     public void NextTurn()
     {
         selectedCharacter = -1;
@@ -114,4 +138,5 @@ public class PlayerUI : MonoBehaviour
         BattleManager.Instance.timeline.ActiveCharacter.SwitchToAttackStateToStaticState();
         //call function
     }
+    
 }

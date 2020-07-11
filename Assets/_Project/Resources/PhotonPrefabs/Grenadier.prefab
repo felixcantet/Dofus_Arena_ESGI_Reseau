@@ -1394,7 +1394,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 97a43abef40ca58429c91f1fd58dc8ab, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  name: 
+  name: Grenad
   stats:
     PM: 4
     PA: 6

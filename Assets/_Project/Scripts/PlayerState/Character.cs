@@ -39,17 +39,12 @@ public class Character : MonoBehaviourPun, IPunObservable
     [PunRPC]
     public void SetCharacterName(string name)
     {
-        this.name = name;
+        //this.name = name;
     }
 
     [PunRPC]
     public void Damage(int damage)
     {
-        //TextEffect t = Instantiate(BattleManager.Instance.textEffectPrefab, transform.position + Vector3.up * 1.5f,
-        //    BattleManager.Instance.textEffectPrefab.transform.rotation);
-       // t.text.text = "- " + damage.ToString();
-        
-        
         this.PlayerStats.currentLife -= damage;
         
         if (this.PlayerStats.currentLife <= 0)

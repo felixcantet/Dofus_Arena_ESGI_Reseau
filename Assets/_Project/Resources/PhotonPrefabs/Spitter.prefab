@@ -106,13 +106,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 97a43abef40ca58429c91f1fd58dc8ab, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  name: 
+  name: Spitter
   stats:
     PM: 4
     PA: 6
     currentLife: 0
     maxLife: 200
+    defaultPM: 4
+    defaultPA: 6
+    attackRange: 2
+    damage: 50
   position: {fileID: 0}
+  moveableTiles: []
+  currentState: 0
 --- !u!136 &5677688875457600270
 CapsuleCollider:
   m_ObjectHideFlags: 0

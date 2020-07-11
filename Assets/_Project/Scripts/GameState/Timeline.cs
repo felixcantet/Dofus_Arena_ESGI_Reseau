@@ -41,6 +41,7 @@ public class Timeline
         Debug.Log(ActiveCharacter.name);
         
         ActiveCharacter.SearchMoveableTile(ActiveCharacter.PlayerStats.PM);
+        
     }
 
     public void RemoveCharacterFromTimeline(Character die)
