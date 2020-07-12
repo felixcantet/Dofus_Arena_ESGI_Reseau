@@ -3461,6 +3461,8 @@ MonoBehaviour:
   - {fileID: 2055150235}
   - {fileID: 1409557490}
   teams: []
+  turnTime: 30
+  currentTurnTime: 0
 --- !u!114 &302143477
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3476,11 +3478,10 @@ MonoBehaviour:
   ObservedComponentsFoldoutOpen: 1
   Group: 0
   prefixField: -1
-  Synchronization: 0
+  Synchronization: 3
   OwnershipTransfer: 0
   ObservedComponents:
-  - {fileID: 0}
-  - {fileID: 0}
+  - {fileID: 302143476}
   viewIdField: 1
   InstantiationId: 0
   isRuntimeInstantiated: 0
@@ -14260,7 +14261,7 @@ GameObject:
   - component: {fileID: 1548375601}
   - component: {fileID: 1548375600}
   m_Layer: 5
-  m_Name: Dummy
+  m_Name: TimerTXT
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -17389,6 +17390,7 @@ MonoBehaviour:
   nameText: {fileID: 22061494}
   pmText: {fileID: 261431124}
   paText: {fileID: 1946898521}
+  timerText: {fileID: 1548375600}
 --- !u!4 &1930238739
 Transform:
   m_ObjectHideFlags: 0

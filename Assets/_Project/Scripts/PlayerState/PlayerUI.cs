@@ -18,6 +18,9 @@ public class PlayerUI : MonoBehaviour
     public TextMeshProUGUI pmText;
     public TextMeshProUGUI paText;
 
+    [Header("Timer Text")] 
+    public TextMeshProUGUI timerText;
+    
     private int selectedCharacter = -1;
 
     private IEnumerator Start()
@@ -43,7 +46,9 @@ public class PlayerUI : MonoBehaviour
         selectedCharacter = -1;
         if (BattleManager.Instance.timeline.ActiveCharacter.photonView.IsMine)
         {
-            if (BattleManager.Instance.timeline.ActiveCharacter.currentState != CharacterState.STATIC)
+            if (BattleManager.Instance.timeline.ActiveCharacter.currentState == CharacterState.MOVE ||
+                BattleManager.Instance.timeline.ActiveCharacter.currentState == CharacterState.ATTACK_PROCESS || 
+                BattleManager.Instance.timeline.ActiveCharacter.currentState == CharacterState.DEAD)
                 return;
             
             foreach(var item in MapManager.Instance.map)
@@ -64,6 +69,18 @@ public class PlayerUI : MonoBehaviour
         pmText.text = " PM";
     }
 
+    public static void NextTurnAfterTimer()
+    {
+        {
+            foreach(var item in MapManager.Instance.map)
+            {
+                item.SetColor(Color.white);
+            }
+            
+            BattleManager.Instance.photonView.RPC("SetNextTurn", RpcTarget.AllBuffered);
+        }
+    }
+    
     private void Update()
     {
         if (BattleManager.Instance == null || BattleManager.Instance.timeline == null)
@@ -95,6 +112,8 @@ public class PlayerUI : MonoBehaviour
                 paText.text = BattleManager.Instance.timeline.ActiveCharacter.PlayerStats.PA + " PA";
                 pmText.text = BattleManager.Instance.timeline.ActiveCharacter.PlayerStats.PM + " PM";
             }
+
+            timerText.text = BattleManager.Instance.currentTurnTime.ToString("00");
         }
         else
         {
@@ -115,6 +134,8 @@ public class PlayerUI : MonoBehaviour
                 paText.text = " PA";
                 pmText.text = " PM";
             }
+            
+            timerText.text = "00";
         }
         
     }

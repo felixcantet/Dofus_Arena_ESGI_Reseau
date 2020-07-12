@@ -18,9 +18,6 @@ public class BattleManager : NetworkSingleton<BattleManager>, IPunObservable
     public Button[] teamA_button = new Button[0];
     public Button[] teamB_button = new Button[0];
     
-    public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
-    {
-    }
 
     public List<Team> teams;
 
@@ -28,6 +25,22 @@ public class BattleManager : NetworkSingleton<BattleManager>, IPunObservable
 
     public static bool battleStart = false;
 
+    public float turnTime = 30.0f;
+    public float currentTurnTime = 30.0f;
+    
+    #region PUN Callbacks
+    public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
+    {
+        if (stream.IsWriting)
+        {
+            stream.SendNext(currentTurnTime);
+        }
+        else if (stream.IsReading)
+        {
+            this.currentTurnTime = (float) stream.ReceiveNext();
+        }
+    }
+    
     [PunRPC]
     public void AddTeam(Team team)
     {
@@ -72,11 +85,16 @@ public class BattleManager : NetworkSingleton<BattleManager>, IPunObservable
             if (finded)
                 break;
         }
+        
+        if (timeline.ActiveCharacter.photonView.IsMine)
+            StartCoroutine(nameof(Chrono));
     }
     
     [PunRPC]
     public void SetNextTurn()
     {
+        StopAllCoroutines();
+        
         timeline.ActiveCharacter.PlayerStats.PM = timeline.ActiveCharacter.PlayerStats.DEFAULT_PM;
         timeline.ActiveCharacter.PlayerStats.PA = timeline.ActiveCharacter.PlayerStats.DEFAULT_PA;
 
@@ -106,6 +124,9 @@ public class BattleManager : NetworkSingleton<BattleManager>, IPunObservable
             if (finded)
                 break;
         }
+
+        if (photonView.IsMine)
+            StartCoroutine(nameof(Chrono));
     }
 
     [PunRPC]
@@ -123,6 +144,7 @@ public class BattleManager : NetworkSingleton<BattleManager>, IPunObservable
         pos.y = spellEffects[spellEffectId].transform.position.y;
         Instantiate(spellEffects[spellEffectId], pos, spellEffects[spellEffectId].transform.rotation);
     }
+    #endregion
     
     public void SetActifAvatar(int id, int team)
     {
@@ -134,5 +156,23 @@ public class BattleManager : NetworkSingleton<BattleManager>, IPunObservable
         {
             teamB_button[id].image.color = Color.yellow;
         }
+    }
+
+    private IEnumerator Chrono()
+    {
+        currentTurnTime = turnTime;
+        yield return new WaitForSeconds(1.0f);
+
+        while (currentTurnTime > 0.0f)
+        {
+            yield return new WaitForSeconds(1.0f);
+            currentTurnTime -= 1.0f;
+
+            if (currentTurnTime <= 0.0f)
+                break;
+        }
+        
+        PlayerUI.NextTurnAfterTimer();
+        yield break;
     }
 }
