@@ -92,6 +92,9 @@ public class MapManager : NetworkSingleton<MapManager>, IPunObservable
                 if(item.used)
                     continue;
                 
+                if (item.tileType != TileType.NORMAL)
+                    continue;
+                
                 if (!tileFlags[item].discovered)
                 {
                     tileFlags[item].SetFlags(true, tile);
@@ -145,6 +148,9 @@ public class MapManager : NetworkSingleton<MapManager>, IPunObservable
                     if(neig.used)
                         continue;
                 
+                if (neig.tileType != TileType.NORMAL)
+                        continue;
+                
                 int calX = neig.position.x > startPos.position.x
                     ? neig.position.x - startPos.position.x
                     : startPos.position.x - neig.position.x;
@@ -164,8 +170,6 @@ public class MapManager : NetworkSingleton<MapManager>, IPunObservable
                 }
             }
         }
-
-        //tiles.Remove(startPos);
         
         List<Tile> finalTiles = new List<Tile>();
         
@@ -186,6 +190,12 @@ public class MapManager : NetworkSingleton<MapManager>, IPunObservable
                 //Debug.Log("j'ajoute la tile !");
                 finalTiles.Add(tile);
             }
+        }
+        
+        //Check ligne de vue
+        if (rangeForAttack)
+        {
+            
         }
         
         return finalTiles;

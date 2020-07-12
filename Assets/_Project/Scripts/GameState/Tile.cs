@@ -50,6 +50,21 @@ public class Tile : MonoBehaviourPun, IPunObservable
     private void Start()
     {
         GetNeighbours();
+
+        switch (tileType)
+        {
+            case TileType.NORMAL:
+                break;
+            
+            case TileType.OBSTACLE_VIDE:
+                rd.enabled = false;
+                break;
+            
+            case TileType.OBSTACLE:
+                obstacle.SetActive(true);
+                break;
+        }
+        
         MapManager.Instance.AddTile(this.photonView.ViewID);
         //MapManager.Instance.photonView.RPC("AddTile", RpcTarget.AllBuffered, this.photonView.ViewID);
     }

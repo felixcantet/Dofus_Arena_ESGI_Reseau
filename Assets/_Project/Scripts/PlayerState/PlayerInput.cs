@@ -143,15 +143,19 @@ public class PlayerInput : MonoBehaviour
         Ray ray = camera.ScreenPointToRay(Input.mousePosition);
         RaycastHit hit;
         
-        if(Physics.Raycast(ray, out hit, tileLayer))
+        if(Physics.Raycast(ray, out hit, 300.0f ,tileLayer))
         {
             var tile = hit.transform.GetComponent<Tile>();
 
             if (!BattleManager.Instance.timeline.ActiveCharacter.moveableTiles.Contains(tile))
                 return null;
 
+            if (tile.tileType != TileType.NORMAL)
+                return null;
+
             if (tile.used && BattleManager.Instance.timeline.ActiveCharacter.currentState != CharacterState.ATTACK_MODE)
                 return null;
+            
             
             return tile;
         }
