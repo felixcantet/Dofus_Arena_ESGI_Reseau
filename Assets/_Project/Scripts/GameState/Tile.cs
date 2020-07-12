@@ -4,10 +4,19 @@ using UnityEngine;
 using Photon.Pun;
 public class Tile : MonoBehaviourPun, IPunObservable
 {
+    [Header("Tile informations")]
+    public TileType tileType = TileType.NORMAL;
     public Vector2Int position;
-    public List<Tile> neighbours;
-    public LayerMask tileDetection;
     public bool used;
+    
+    [Header("Neighbours")]
+    public LayerMask tileDetection;
+    public List<Tile> neighbours;
+
+    [Header("Tile Behavior")] 
+    public MeshRenderer rd;
+    public GameObject obstacle;
+    
     public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
     {
         if (stream.IsWriting)
@@ -32,6 +41,9 @@ public class Tile : MonoBehaviourPun, IPunObservable
 
     public void Awake()
     {
+        if (rd == null)
+            rd = GetComponent<MeshRenderer>();
+        
         this.position = new Vector2Int(Mathf.RoundToInt(transform.position.x), Mathf.RoundToInt(this.transform.position.z));
     }
 
@@ -70,3 +82,9 @@ public class Tile : MonoBehaviourPun, IPunObservable
     }
 }
 
+public enum TileType
+{
+    NORMAL,
+    OBSTACLE_VIDE,
+    OBSTACLE
+}

@@ -144,6 +144,8 @@ public class BattleManager : NetworkSingleton<BattleManager>, IPunObservable
             BattleManager.Instance.textEffectPrefab.transform.rotation);
         t.displayColor = new Color(r, g, b, 0.0f);
         t.text.text = txt;
+        
+        Debug.LogWarning("Dispaly Text Effect !!! ----- " + txt);
     }
 
     [PunRPC]
@@ -161,7 +163,12 @@ public class BattleManager : NetworkSingleton<BattleManager>, IPunObservable
 
         if (battleLog.childCount > maxLog)
         {
-            Destroy(battleLog.GetChild(0).gameObject);
+            for (int i = 0; i < battleLog.childCount; i++)
+            {
+                Destroy(battleLog.GetChild(0).gameObject);
+                if (battleLog.childCount <= maxLog)
+                    break;
+            }
         }
     }
     #endregion

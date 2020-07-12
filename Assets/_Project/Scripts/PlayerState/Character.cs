@@ -80,6 +80,14 @@ public class Character : MonoBehaviourPun, IPunObservable
                 {
                     case SpellActionType.DAMAGE:
                         this.PlayerStats.currentLife += sa.value;
+                        
+                        BattleManager.Instance.photonView.RPC("DisplayTextEffect", RpcTarget.AllViaServer,
+                            transform.position + offset,
+                            BattleManager.Instance.lifeTxtColor.r,
+                            BattleManager.Instance.lifeTxtColor.g,
+                            BattleManager.Instance.lifeTxtColor.b,
+                            sa.value.ToString());
+                        
                         str += sa.value.ToString() + " Vie.";
                         break;
 
@@ -91,7 +99,7 @@ public class Character : MonoBehaviourPun, IPunObservable
                                 this.PlayerStats.currentLife = Mathf.Clamp(this.stats.currentLife + sa.value, 0,
                                     this.PlayerStats.MAX_LIFE);
                                 
-                                BattleManager.Instance.photonView.RPC("DisplayTextEffect", RpcTarget.AllBuffered,
+                                BattleManager.Instance.photonView.RPC("DisplayTextEffect", RpcTarget.AllViaServer,
                                     transform.position + offset,
                                     BattleManager.Instance.lifeTxtColor.r,
                                     BattleManager.Instance.lifeTxtColor.g,
@@ -104,7 +112,7 @@ public class Character : MonoBehaviourPun, IPunObservable
                             case ResourcesType.PA:
                                 this.PlayerStats.PA = Mathf.Clamp(this.PlayerStats.PA + sa.value, 0, 30);
                                 
-                                BattleManager.Instance.photonView.RPC("DisplayTextEffect", RpcTarget.AllBuffered,
+                                BattleManager.Instance.photonView.RPC("DisplayTextEffect", RpcTarget.AllViaServer,
                                     transform.position + offset,
                                     BattleManager.Instance.paTxtColor.r,
                                     BattleManager.Instance.paTxtColor.g,
@@ -117,7 +125,7 @@ public class Character : MonoBehaviourPun, IPunObservable
                             case ResourcesType.PM:
                                 this.PlayerStats.PM = Mathf.Clamp(this.PlayerStats.PM + sa.value, 0, 30);
                                 
-                                BattleManager.Instance.photonView.RPC("DisplayTextEffect", RpcTarget.AllBuffered,
+                                BattleManager.Instance.photonView.RPC("DisplayTextEffect", RpcTarget.AllViaServer,
                                     transform.position + offset,
                                     BattleManager.Instance.pmTxtColor.r,
                                     BattleManager.Instance.pmTxtColor.g,
@@ -196,11 +204,11 @@ public class Character : MonoBehaviourPun, IPunObservable
 
         Tile tmp = this.position;
 
-        BattleManager.Instance.photonView.RPC("DisplayTextEffect", RpcTarget.AllBuffered, transform.position,
+        BattleManager.Instance.photonView.RPC("DisplayTextEffect", RpcTarget.AllViaServer, transform.position,
             BattleManager.Instance.pmTxtColor.r,
             BattleManager.Instance.pmTxtColor.g,
             BattleManager.Instance.pmTxtColor.b,
-            "-" + path.Count + " PM");
+            "-" + path.Count);
 
         float moveSpeed = 0.5f;
         var currentTarget = path.Pop();
@@ -296,7 +304,7 @@ public class Character : MonoBehaviourPun, IPunObservable
         BaseSpell s = Spells[selectedSpell];
 
         //Instantiate Spell Effect
-        BattleManager.Instance.photonView.RPC("DisplaySpellEffect", RpcTarget.All, tilesPosition, s.spellEffectID);
+        BattleManager.Instance.photonView.RPC("DisplaySpellEffect", RpcTarget.AllViaServer, tilesPosition, s.spellEffectID);
 
         int count = s.spellCosts.Count - 1;
         foreach (var res in s.spellCosts)
@@ -307,7 +315,7 @@ public class Character : MonoBehaviourPun, IPunObservable
             {
                 case ResourcesType.PA:
                     this.PlayerStats.PA = Mathf.Clamp(this.PlayerStats.PA + res.cost, 0, 999);
-                    BattleManager.Instance.photonView.RPC("DisplayTextEffect", RpcTarget.AllBuffered,
+                    BattleManager.Instance.photonView.RPC("DisplayTextEffect", RpcTarget.AllViaServer,
                         transform.position + offset,
                         BattleManager.Instance.paTxtColor.r,
                         BattleManager.Instance.paTxtColor.g,
@@ -317,7 +325,7 @@ public class Character : MonoBehaviourPun, IPunObservable
 
                 case ResourcesType.PM:
                     this.PlayerStats.PM = Mathf.Clamp(this.PlayerStats.PM + res.cost, 0, 999);
-                    BattleManager.Instance.photonView.RPC("DisplayTextEffect", RpcTarget.AllBuffered,
+                    BattleManager.Instance.photonView.RPC("DisplayTextEffect", RpcTarget.AllViaServer,
                         transform.position + offset,
                         BattleManager.Instance.pmTxtColor.r,
                         BattleManager.Instance.pmTxtColor.g,
@@ -327,7 +335,7 @@ public class Character : MonoBehaviourPun, IPunObservable
 
                 case ResourcesType.LIFE:
                     stats.currentLife += res.cost;
-                    BattleManager.Instance.photonView.RPC("DisplayTextEffect", RpcTarget.AllBuffered,
+                    BattleManager.Instance.photonView.RPC("DisplayTextEffect", RpcTarget.AllViaServer,
                         transform.position + offset,
                         BattleManager.Instance.lifeTxtColor.r,
                         BattleManager.Instance.lifeTxtColor.g,

@@ -7,6 +7,7 @@ using Photon.Pun;
 public class PlayerInput : MonoBehaviour
 {
     public Camera camera;
+    public LayerMask tileLayer;
     
     public static bool IsLocalPlayerActiveCharacter
     {
@@ -141,8 +142,8 @@ public class PlayerInput : MonoBehaviour
     {
         Ray ray = camera.ScreenPointToRay(Input.mousePosition);
         RaycastHit hit;
-        var layerMask = LayerMask.GetMask("Tile");
-        if(Physics.Raycast(ray, out hit, layerMask))
+        
+        if(Physics.Raycast(ray, out hit, tileLayer))
         {
             var tile = hit.transform.GetComponent<Tile>();
 
