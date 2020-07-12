@@ -4,13 +4,21 @@ using UnityEngine;
 using Photon.Pun;
 using Sirenix.OdinInspector;
 using Sirenix.Serialization;
+using TMPro;
 using UnityEngine.UI;
 
 public class BattleManager : NetworkSingleton<BattleManager>, IPunObservable
 {
     [Header("UI Effect")]
     public TextEffect textEffectPrefab;
-
+    public Color lifeTxtColor;
+    public Color pmTxtColor;
+    public Color paTxtColor;
+    [Space(10)] 
+    public TextMeshProUGUI battleLogTXTPrefab;
+    public Transform battleLog;
+    public int maxLog = 8;
+    
     [Header("Spell Effect")] 
     public List<GameObject> spellEffects;
     
@@ -143,6 +151,18 @@ public class BattleManager : NetworkSingleton<BattleManager>, IPunObservable
     {
         pos.y = spellEffects[spellEffectId].transform.position.y;
         Instantiate(spellEffects[spellEffectId], pos, spellEffects[spellEffectId].transform.rotation);
+    }
+
+    [PunRPC]
+    public void AddBattleLog(string txt)
+    {
+        TextMeshProUGUI tmp = Instantiate(battleLogTXTPrefab, battleLog);
+        tmp.text = txt;
+
+        if (battleLog.childCount > maxLog)
+        {
+            Destroy(battleLog.GetChild(0).gameObject);
+        }
     }
     #endregion
     

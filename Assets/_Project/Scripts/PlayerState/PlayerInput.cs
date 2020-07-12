@@ -113,50 +113,15 @@ public class PlayerInput : MonoBehaviour
                                     break;
                             }
 
+                            //Lancement battle log cast spell
+                            string str = "<b>" + BattleManager.Instance.timeline.ActiveCharacter.name + "</b>" + " lance <b>" + spell.spellName + "</b>";
+                            BattleManager.Instance.photonView.RPC("AddBattleLog", RpcTarget.AllViaServer, str);
+                            
                             //Si y'a un character
                             if (c != null)
                             {
                                 //Je lui dit de caster le spell
                                 PhotonNetwork.GetPhotonView(c.photonView.ViewID).RPC("CastSpell", RpcTarget.AllBuffered, spell);
-                                
-                                //J'affiche les feed back (a voir si on peut pas les mettre dans le cast de spell)
-                                int count = spell.spellActions.Count - 1;
-                                foreach (var v in spell.spellActions)
-                                {
-                                    Vector3 offset = 0.5f * count * Vector3.up;
-                                    switch (v.resource)
-                                    {
-                                        case ResourcesType.PA:
-                                            BattleManager.Instance.photonView.RPC("DisplayTextEffect", RpcTarget.AllBuffered, 
-                                                c.transform.position + offset,
-                                                0.0f,
-                                                0.25f,
-                                                0.78f,
-                                                v.value.ToString());
-                                            break;
-                
-                                        case ResourcesType.PM:
-                                            BattleManager.Instance.photonView.RPC("DisplayTextEffect", RpcTarget.AllBuffered, 
-                                                c.transform.position + offset,
-                                                0.0f,
-                                                0.78f,
-                                                0.25f,
-                                                v.value.ToString());
-                                            break;
-                
-                                        case ResourcesType.LIFE:
-                                            BattleManager.Instance.photonView.RPC("DisplayTextEffect", RpcTarget.AllBuffered, 
-                                                c.transform.position + offset,
-                                                BattleManager.Instance.textEffectPrefab.displayColor.r,
-                                                BattleManager.Instance.textEffectPrefab.displayColor.g,
-                                                BattleManager.Instance.textEffectPrefab.displayColor.b,
-                                                v.value.ToString());
-                                            continue;
-                                    }
-
-                                    count--;
-
-                                }
                             }
                             
                             //Je process l'attaque
