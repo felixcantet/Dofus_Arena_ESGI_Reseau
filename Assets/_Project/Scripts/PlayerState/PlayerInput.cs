@@ -83,18 +83,20 @@ public class PlayerInput : MonoBehaviour
                         tileAtck.SetColor(Color.red);
                         if (Input.GetMouseButtonDown(0))
                         {
-                            if (BattleManager.Instance.timeline.ActiveCharacter.PlayerStats.PA < 3)
+                            //Je get le spell choisi
+                            BaseSpell spell =
+                                BattleManager.Instance.timeline.ActiveCharacter.Spells[
+                                    BattleManager.Instance.timeline.ActiveCharacter.selectedSpell];
+                            
+                            //Je demande si les resources sont présentes
+                            if (BattleManager.Instance.timeline.ActiveCharacter.ResourcesAvailable() == false)
                             {
+                                Debug.Log("Je peux pas lancer le sort !!! zut");
                                 BattleManager.Instance.timeline.ActiveCharacter.SwitchToAttackStateToStaticState(0);
                                 return;
                             }
                             
-                            if (!BattleManager.Instance.timeline.ActiveCharacter.ResourcesAvailable())
-                            {
-                                BattleManager.Instance.timeline.ActiveCharacter.SwitchToAttackStateToStaticState(0);
-                                return;
-                            }
-                            
+                            //si oui, je cherche le character sur la tiles en question
                             Character c = null;
                             foreach (var team in BattleManager.Instance.teams)
                             {
@@ -111,19 +113,14 @@ public class PlayerInput : MonoBehaviour
                                     break;
                             }
 
+                            //Si y'a un character
                             if (c != null)
                             {
-                                //PhotonNetwork.GetPhotonView(c.photonView.ViewID).RPC("Damage", 
-                                //    RpcTarget.AllBuffered, BattleManager.Instance.timeline.ActiveCharacter.PlayerStats.DAMAGE);
-
-                                BaseSpell spell =
-                                    BattleManager.Instance.timeline.ActiveCharacter.Spells[
-                                        BattleManager.Instance.timeline.ActiveCharacter.selectedSpell];
-                                
+                                //Je lui dit de caster le spell
                                 PhotonNetwork.GetPhotonView(c.photonView.ViewID).RPC("CastSpell", RpcTarget.AllBuffered, spell);
                                 
+                                //J'affiche les feed back (a voir si on peut pas les mettre dans le cast de spell)
                                 int count = spell.spellActions.Count - 1;
-                                
                                 foreach (var v in spell.spellActions)
                                 {
                                     Vector3 offset = 0.5f * count * Vector3.up;
@@ -160,12 +157,10 @@ public class PlayerInput : MonoBehaviour
                                     count--;
 
                                 }
-                                
-                                
-                                
                             }
                             
-                            BattleManager.Instance.timeline.ActiveCharacter.SetAttackProcess();
+                            //Je process l'attaque
+                            BattleManager.Instance.timeline.ActiveCharacter.SetAttackProcess(new Vector3(tileAtck.position.x, 0.0f, tileAtck.position.y));
                         }
                     }
                     break;

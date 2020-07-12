@@ -26,3 +26,4 @@ MonoBehaviour:
   - spellActionType: 1
     value: -2
     resource: 0
+  spellEffectID: 1

@@ -28,6 +28,7 @@ public class Character : MonoBehaviourPun, IPunObservable
     [Header("Feedback")]
     public GameObject activeEffect;
     
+    #region PUN Callbacks
     public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
     {
         if (stream.IsWriting)
@@ -68,7 +69,9 @@ public class Character : MonoBehaviourPun, IPunObservable
     [PunRPC]
     public void CastSpell(BaseSpell spell)
     {
-        foreach (var sa in spell.spellActions)
+        if (spell != null)
+        {
+            foreach (var sa in spell.spellActions)
         {
             switch (sa.spellActionType)
             {
@@ -95,6 +98,7 @@ public class Character : MonoBehaviourPun, IPunObservable
                     break;
             }
         }
+        }
         
         if (this.PlayerStats.currentLife <= 0)
         {
@@ -114,12 +118,13 @@ public class Character : MonoBehaviourPun, IPunObservable
         this.position = tile;
         this.position.used = true;
     }
+    #endregion
     
     private void Awake()
     {
         this.stats.currentLife = this.stats.MAX_LIFE;
     }
-
+    
     public void SearchMoveableTile(Vector2Int range, bool attackState = false)
     {
         if (!photonView.IsMine)
@@ -238,7 +243,7 @@ public class Character : MonoBehaviourPun, IPunObservable
         
     }
 
-    public void SetAttackProcess()
+    public void SetAttackProcess(Vector3 tilesPosition)
     {
         if (!photonView.IsMine)
             return;
@@ -247,9 +252,10 @@ public class Character : MonoBehaviourPun, IPunObservable
         
         BaseSpell s = Spells[selectedSpell];
 
-
-        int count = s.spellCosts.Count - 1;
+        //Instantiate Spell Effect
+        BattleManager.Instance.photonView.RPC("DisplaySpellEffect", RpcTarget.All, tilesPosition, s.spellEffectID);
         
+        int count = s.spellCosts.Count - 1;
         foreach (var res in s.spellCosts)
         {
             Vector3 offset = 0.5f * count * Vector3.up;
@@ -289,7 +295,9 @@ public class Character : MonoBehaviourPun, IPunObservable
         
         StartCoroutine(nameof(DelayAttack));
         
-        //Fonction de check si le character n'est pas mort
+        //Check si le character n'est pas mort
+        if(this.stats.currentLife <= 0)
+            PhotonNetwork.GetPhotonView(photonView.ViewID).RPC("CastSpell", RpcTarget.AllBuffered, null);
     }
 
     IEnumerator DelayAttack()
@@ -306,26 +314,30 @@ public class Character : MonoBehaviourPun, IPunObservable
     {
         BaseSpell s = Spells[selectedSpell];
 
+        bool availaible = true;
+        
         foreach (var res in s.spellCosts)
         {
             switch (res.resourcesType)
             {
                 case ResourcesType.PA:
-                    if (stats.PA < res.cost)
-                        return false;
+                    if (stats.PA < Mathf.Abs(res.cost))
+                        availaible = false;
                     break;
                 
                 case ResourcesType.PM:
-                    if (stats.PM < res.cost)
-                        return false;
+                    if (stats.PM < Mathf.Abs(res.cost))
+                        availaible = false;
                     break;
                 
                 case ResourcesType.LIFE:
-                    continue;
+                    break;
             }
         }
         
-        return true;
+        Debug.Log("Le sort est : " + availaible);
+        
+        return availaible;
     }
 }
 

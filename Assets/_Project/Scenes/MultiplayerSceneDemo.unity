@@ -3442,6 +3442,16 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   textEffectPrefab: {fileID: 5916755043464383062, guid: c0faa0e6f8f2eef458f31c104bba4c72,
     type: 3}
+  spellEffects:
+  - {fileID: 4220394263667215547, guid: 4b14783be98009845b0fa31e7176a8bf, type: 3}
+  - {fileID: 6229864463179494633, guid: 68285984f0daab147b120a8074c202bb, type: 3}
+  - {fileID: 3894159625585250685, guid: 2a6533dda038ceb41aaef30e11fe2909, type: 3}
+  - {fileID: 2238777194965019654, guid: 9d31bfc294735874b862136d5b6bf836, type: 3}
+  - {fileID: 3978851188830948927, guid: 9333127aa2e84a14085e4c611a0660b7, type: 3}
+  - {fileID: 7276997125884622566, guid: b41c977b0551e85448e91ba522be1e77, type: 3}
+  - {fileID: 4373553006283117991, guid: b82edf1f59825f44e9c7c61b5500fd4d, type: 3}
+  - {fileID: 8805582156263904507, guid: 84479bbea85950a4fb7eb4c188aff145, type: 3}
+  - {fileID: 4452673492062269694, guid: 6100d06e0a3c23941bad9703c5e359a7, type: 3}
   teamA_button:
   - {fileID: 2111982412}
   - {fileID: 1955505748}

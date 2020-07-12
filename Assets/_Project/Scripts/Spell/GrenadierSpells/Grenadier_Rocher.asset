@@ -23,3 +23,4 @@ MonoBehaviour:
   - spellActionType: 0
     value: -40
     resource: 2
+  spellEffectID: 6

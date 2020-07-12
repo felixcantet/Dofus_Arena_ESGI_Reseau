@@ -111,7 +111,7 @@ public class MapManager : NetworkSingleton<MapManager>, IPunObservable
                 break;
 
             path.Push(currentTile);
-            Debug.Log(tileFlags[currentTile].parent);
+//            Debug.Log(tileFlags[currentTile].parent);
             currentTile = tileFlags[currentTile].parent;
 
         }

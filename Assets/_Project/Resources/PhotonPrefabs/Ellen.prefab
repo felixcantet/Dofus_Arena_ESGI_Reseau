@@ -3610,8 +3610,6 @@ MonoBehaviour:
     maxLife: 200
     defaultPM: 4
     defaultPA: 6
-    attackRange: {x: 2, y: 8}
-    damage: 50
   Spells:
   - {fileID: 11400000, guid: 220397e350051544f8459ef15dbbb587, type: 2}
   - {fileID: 11400000, guid: b7c345ee5767fec439fd894af2923ed1, type: 2}

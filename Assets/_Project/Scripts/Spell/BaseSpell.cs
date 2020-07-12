@@ -15,8 +15,12 @@ public class BaseSpell : ScriptableObject
     public Vector2Int spellRange;
     public List<ResourcesCost> spellCosts;
     public List<SpellAction> spellActions;
-    
-    
+
+    [Header("Spell Feedback")] 
+    public int spellEffectID;
+
+    #region Serialize Custom Photon
+
     public static byte[] Serialize(object o)
     {
         var team = (BaseSpell)o;
@@ -36,6 +40,8 @@ public class BaseSpell : ScriptableObject
     {
         ExitGames.Client.Photon.PhotonPeer.RegisterType(typeof(BaseSpell), (byte)'S', Serialize, Deserialize);
     }
+    
+    #endregion
 }
 
 // ----------------------------------------

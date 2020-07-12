@@ -8,7 +8,11 @@ using UnityEngine.UI;
 
 public class BattleManager : NetworkSingleton<BattleManager>, IPunObservable
 {
+    [Header("UI Effect")]
     public TextEffect textEffectPrefab;
+
+    [Header("Spell Effect")] 
+    public List<GameObject> spellEffects;
     
     [Header("Character Button")]
     public Button[] teamA_button = new Button[0];
@@ -113,6 +117,13 @@ public class BattleManager : NetworkSingleton<BattleManager>, IPunObservable
         t.text.text = txt;
     }
 
+    [PunRPC]
+    public void DisplaySpellEffect(Vector3 pos, int spellEffectId)
+    {
+        pos.y = spellEffects[spellEffectId].transform.position.y;
+        Instantiate(spellEffects[spellEffectId], pos, spellEffects[spellEffectId].transform.rotation);
+    }
+    
     public void SetActifAvatar(int id, int team)
     {
         if (team == 0)
