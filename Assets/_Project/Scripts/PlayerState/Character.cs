@@ -81,15 +81,15 @@ public class Character : MonoBehaviourPun, IPunObservable
                     switch (sa.resource)
                     {
                         case ResourcesType.LIFE:
-                            this.PlayerStats.currentLife += sa.value;
+                            this.PlayerStats.currentLife = Mathf.Clamp(this.stats.currentLife + sa.value, 0, this.PlayerStats.MAX_LIFE);
                             break;
                         
                         case ResourcesType.PA:
-                            this.PlayerStats.PA = Mathf.Clamp(this.PlayerStats.PA + sa.value, 0, 999);
+                            this.PlayerStats.PA = Mathf.Clamp(this.PlayerStats.PA + sa.value, 0, 30);
                             break;
                         
                         case ResourcesType.PM:
-                            this.PlayerStats.PM = Mathf.Clamp(this.PlayerStats.PM + sa.value, 0, 999);
+                            this.PlayerStats.PM = Mathf.Clamp(this.PlayerStats.PM + sa.value, 0, 30);
                             break;
                     }
                     break;
