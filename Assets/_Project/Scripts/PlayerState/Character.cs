@@ -252,23 +252,23 @@ public class Character : MonoBehaviourPun, IPunObservable
             switch (res.resourcesType)
             {
                 case ResourcesType.PA:
-                    stats.PA += res.cost;
+                    this.PlayerStats.PA = Mathf.Clamp(this.PlayerStats.PA + res.cost, 0, 999);
                     BattleManager.Instance.photonView.RPC("DisplayTextEffect", RpcTarget.AllBuffered, transform.position,
                         0.0f,
                         0.25f,
                         0.78f,
                         res.cost.ToString() + " PA");
                     break;
-                
+                        
                 case ResourcesType.PM:
-                    stats.PM += res.cost;
+                    this.PlayerStats.PM = Mathf.Clamp(this.PlayerStats.PM + res.cost, 0, 999);
                     BattleManager.Instance.photonView.RPC("DisplayTextEffect", RpcTarget.AllBuffered, transform.position,
                         0.0f,
                         0.78f,
                         0.25f,
                         res.cost.ToString() + " PM");
                     break;
-                
+               
                 case ResourcesType.LIFE:
                     stats.currentLife += res.cost;
                     BattleManager.Instance.photonView.RPC("DisplayTextEffect", RpcTarget.AllBuffered, transform.position,
@@ -282,11 +282,7 @@ public class Character : MonoBehaviourPun, IPunObservable
         
         StartCoroutine(nameof(DelayAttack));
         
-        // BattleManager.Instance.photonView.RPC("DisplayTextEffect", RpcTarget.AllBuffered, transform.position,
-        //     0.0f,
-        //     0.25f,
-        //     0.78f,
-        //     "-" + 3 + " PA");
+        //Fonction de check si le character n'est pas mort
     }
 
     IEnumerator DelayAttack()

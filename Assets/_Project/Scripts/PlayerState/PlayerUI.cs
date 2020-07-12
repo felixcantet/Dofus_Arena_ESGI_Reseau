@@ -43,6 +43,9 @@ public class PlayerUI : MonoBehaviour
         selectedCharacter = -1;
         if (BattleManager.Instance.timeline.ActiveCharacter.photonView.IsMine)
         {
+            if (BattleManager.Instance.timeline.ActiveCharacter.currentState != CharacterState.STATIC)
+                return;
+            
             foreach(var item in MapManager.Instance.map)
             {
                 item.SetColor(Color.white);
