@@ -8,9 +8,9 @@ using UnityEngine.UI;
 
 public class PlayerUI : MonoBehaviour
 {
-    [Header("Character Text")]
-    public TextMeshProUGUI[] teamA = new TextMeshProUGUI[0];
-    public TextMeshProUGUI[] teamB = new TextMeshProUGUI[0];
+    [Header("Character Icon")]
+    public Image[] teamA = new Image[0];
+    public Image[] teamB = new Image[0];
     
     [Header("Panel Info")]
     public TextMeshProUGUI lifeText;
@@ -18,6 +18,9 @@ public class PlayerUI : MonoBehaviour
     public TextMeshProUGUI pmText;
     public TextMeshProUGUI paText;
 
+    [Header("Spell Info")] 
+    public Image[] spellImage = new Image[0];
+    
     [Header("Timer Text")] 
     public TextMeshProUGUI timerText;
     
@@ -32,12 +35,12 @@ public class PlayerUI : MonoBehaviour
 
         for (int i = 0; i < teamA.Length; i++)
         {
-            teamA[i].text = BattleManager.Instance.teams[0].characters[i].name;
+            teamA[i].sprite = BattleManager.Instance.teams[0].characters[i].characterIcon;
         }
         
         for (int i = 0; i < teamB.Length; i++)
         {
-            teamB[i].text = BattleManager.Instance.teams[1].characters[i].name;
+            teamB[i].sprite = BattleManager.Instance.teams[1].characters[i].characterIcon;
         }
     }
 
@@ -101,18 +104,23 @@ public class PlayerUI : MonoBehaviour
                     .characters[selectedCharacter > 2 ? selectedCharacter - 3 : selectedCharacter];
                 
                 nameText.text = c.name;
-                lifeText.text = c.PlayerStats.currentLife + " PV";
-                paText.text = c.PlayerStats.PA + " PA";
-                pmText.text = c.PlayerStats.PM + " PM";
+                lifeText.text = c.stats.currentLife + " PV";
+                paText.text = c.stats.PA + " PA";
+                pmText.text = c.stats.PM + " PM";
             }
             else
             {
                 nameText.text = BattleManager.Instance.timeline.ActiveCharacter.name;
-                lifeText.text = BattleManager.Instance.timeline.ActiveCharacter.PlayerStats.currentLife + " PV";
-                paText.text = BattleManager.Instance.timeline.ActiveCharacter.PlayerStats.PA + " PA";
-                pmText.text = BattleManager.Instance.timeline.ActiveCharacter.PlayerStats.PM + " PM";
+                lifeText.text = BattleManager.Instance.timeline.ActiveCharacter.stats.currentLife + " PV";
+                paText.text = BattleManager.Instance.timeline.ActiveCharacter.stats.PA + " PA";
+                pmText.text = BattleManager.Instance.timeline.ActiveCharacter.stats.PM + " PM";
             }
 
+            for (int i = 0; i < BattleManager.Instance.timeline.ActiveCharacter.Spells.Count; i++)
+            {
+                spellImage[i].sprite = BattleManager.Instance.timeline.ActiveCharacter.Spells[i].spellIcon;
+            }
+            
             timerText.text = BattleManager.Instance.currentTurnTime.ToString("00");
         }
         else
@@ -123,9 +131,9 @@ public class PlayerUI : MonoBehaviour
                     .characters[selectedCharacter > 2 ? selectedCharacter - 3 : selectedCharacter];
                 
                 nameText.text = c.name;
-                lifeText.text = c.PlayerStats.currentLife + " PV";
-                paText.text = c.PlayerStats.PA + " PA";
-                pmText.text = c.PlayerStats.PM + " PM";
+                lifeText.text = c.stats.currentLife + " PV";
+                paText.text = c.stats.PA + " PA";
+                pmText.text = c.stats.PM + " PM";
             }
             else
             {

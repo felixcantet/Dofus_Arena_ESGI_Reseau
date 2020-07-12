@@ -21,6 +21,7 @@ public class BattleManager : NetworkSingleton<BattleManager>, IPunObservable
     
     [Header("Spell Effect")] 
     public List<GameObject> spellEffects;
+    public List<BaseSpell> spellsBank;
     
     [Header("Character Button")]
     public Button[] teamA_button = new Button[0];
@@ -103,8 +104,8 @@ public class BattleManager : NetworkSingleton<BattleManager>, IPunObservable
     {
         StopAllCoroutines();
         
-        timeline.ActiveCharacter.PlayerStats.PM = timeline.ActiveCharacter.PlayerStats.DEFAULT_PM;
-        timeline.ActiveCharacter.PlayerStats.PA = timeline.ActiveCharacter.PlayerStats.DEFAULT_PA;
+        timeline.ActiveCharacter.stats.PM = timeline.ActiveCharacter.stats.DEFAULT_PM;
+        timeline.ActiveCharacter.stats.PA = timeline.ActiveCharacter.stats.DEFAULT_PA;
 
         for (int i = 0; i < teamA_button.Length; i++)
         {
@@ -170,6 +171,13 @@ public class BattleManager : NetworkSingleton<BattleManager>, IPunObservable
                     break;
             }
         }
+    }
+
+    [PunRPC]
+    public void ApplyCastSpellTo(int spellId, int photonId)
+    {
+        BaseSpell spell = spellsBank[spellId];
+        PhotonNetwork.GetPhotonView(photonId).GetComponent<Character>().CastSpell(spell);
     }
     #endregion
     

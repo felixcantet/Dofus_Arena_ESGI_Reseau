@@ -16,36 +16,41 @@ MonoBehaviour:
     AppIdRealtime: 97c5715a-a8e9-42f8-af55-b8bf16d8e2b4
     AppIdChat: 
     AppIdVoice: 
-    AppVersion: 0.1
+    AppVersion: 
     UseNameServer: 1
     FixedRegion: 
     Server: 
     Port: 0
+    ProxyServer: 
     Protocol: 0
+    EnableProtocolFallback: 1
     AuthMode: 0
     EnableLobbyStatistics: 0
-    NetworkLogging: 1
+    NetworkLogging: 5
   DevRegion: eu
-  PunLogging: 0
-  EnableSupportLogger: 1
+  PunLogging: 2
+  EnableSupportLogger: 0
   RunInBackground: 1
   StartInOfflineMode: 0
   RpcList:
+  - AddTeam
+  - AddTile
+  - BuildTimeline
   - ClickRpc
+  - Damage
   - DestroyRpc
   - DestroySpaceship
   - Fire
-  - RespawnSpaceship
-  - AddTeamData
-  - BuildTimeline
-  - SetText
-  - AddTeam
   - LogFromBuild
-  - SetCharacterName
-  - SetNextTurn
-  - AddTile
-  - Damage
+  - RespawnSpaceship
+  - DisplayTextEffect
   - SetCurrentTile
+  - SetNextTurn
+  - SetCharacterName
+  - CastSpell
+  - DisplaySpellEffect
+  - AddBattleLog
+  - ApplyCastSpellTo
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 1

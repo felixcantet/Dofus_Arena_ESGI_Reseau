@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using Sirenix.Serialization;
 using UnityEngine;
 
 [System.Serializable]
@@ -31,4 +32,28 @@ public class Stats
     {
         get { return defaultPA; }
     }
+    
+    #region Serialize Custom Photon
+
+    public static byte[] Serialize(object o)
+    {
+        var team = (Stats)o;
+        var bytes = SerializationUtility.SerializeValue(team, DataFormat.JSON);
+        return bytes;
+    }
+
+    public static Stats Deserialize(byte[] bytes)
+    {
+        var result = new Stats();
+        result = SerializationUtility.DeserializeValue<Stats>(bytes, DataFormat.JSON);
+
+        return result;
+    }
+    
+    public static void Register()
+    {
+        ExitGames.Client.Photon.PhotonPeer.RegisterType(typeof(Stats), (byte)'A', Serialize, Deserialize);
+    }
+    
+    #endregion
 }

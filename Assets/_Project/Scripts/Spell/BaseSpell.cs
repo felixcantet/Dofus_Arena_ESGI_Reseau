@@ -4,11 +4,14 @@ using Sirenix.Serialization;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "New Spell", menuName = "Spell/New Spell", order = 0)]
+[System.Serializable]
 public class BaseSpell : ScriptableObject
 {
     [Header("Spell information")]
-    public string spellName; 
+    public string spellName;
+    public int spellId;
     [Multiline] public string spellDescription;
+    public Sprite spellIcon;
     
     [Header("Spell Parameter")]
     public SpellType spellType;
@@ -30,7 +33,7 @@ public class BaseSpell : ScriptableObject
 
     public static BaseSpell Deserialize(byte[] bytes)
     {
-        var result = new BaseSpell();
+        var result = ScriptableObject.CreateInstance<BaseSpell>();
         result = SerializationUtility.DeserializeValue<BaseSpell>(bytes, DataFormat.JSON);
 
         return result;

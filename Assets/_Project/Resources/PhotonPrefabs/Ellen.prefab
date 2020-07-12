@@ -3603,6 +3603,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   name: Ellen
+  characterIcon: {fileID: 21300000, guid: 5a1c1029680c25d4989336167dbf27b5, type: 3}
   stats:
     PM: 4
     PA: 6

@@ -13,7 +13,9 @@ MonoBehaviour:
   m_Name: Chomper_TempeteDePuissance
   m_EditorClassIdentifier: 
   spellName: Tempete De Puissance
+  spellId: 2
   spellDescription: --
+  spellIcon: {fileID: 21300000, guid: eced15bb959edc54c8457ab75f9a45b5, type: 3}
   spellType: 0
   spellRange: {x: 2, y: 4}
   spellCosts:

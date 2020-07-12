@@ -47,7 +47,7 @@ public class PlayerInput : MonoBehaviour
                         BattleManager.Instance.timeline.ActiveCharacter.StartCoroutine(BattleManager.Instance.timeline.ActiveCharacter.MoveToTile(path));
                     }
             
-                    if (tile != null && BattleManager.Instance.timeline.ActiveCharacter.PlayerStats.PM > 0)
+                    if (tile != null && BattleManager.Instance.timeline.ActiveCharacter.stats.PM > 0)
                     {
                         var path = MapManager.GetPath(startTile, tile);
                         //Debug.Log(path.Count);
@@ -63,7 +63,7 @@ public class PlayerInput : MonoBehaviour
                     
                     break;
                 
-                // TODO : change with new spell system
+                
                 case CharacterState.ATTACK_MODE:
                     if (Input.GetMouseButtonDown(1))
                     {
@@ -122,7 +122,10 @@ public class PlayerInput : MonoBehaviour
                             if (c != null)
                             {
                                 //Je lui dit de caster le spell
-                                PhotonNetwork.GetPhotonView(c.photonView.ViewID).RPC("CastSpell", RpcTarget.AllBuffered, spell);
+                                //PhotonNetwork.GetPhotonView(c.photonView.ViewID).RPC("Damage", RpcTarget.AllBuffered, 80);
+                                //PhotonNetwork.GetPhotonView(c.photonView.ViewID).RPC("CastSpell", RpcTarget.AllBuffered, spell);
+                                BattleManager.Instance.photonView.RPC("ApplyCastSpellTo", RpcTarget.AllBuffered, 
+                                    spell.spellId, c.photonView.ViewID);
                             }
                             
                             //Je process l'attaque

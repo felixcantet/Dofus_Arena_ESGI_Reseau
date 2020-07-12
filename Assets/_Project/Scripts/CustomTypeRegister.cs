@@ -10,6 +10,7 @@ public class CustomTypeRegister : MonoBehaviour
         Team.Register();
         BaseSpell.Register();
         RegisterGameObject.Register();
+        Stats.Register();
     }
 }
 

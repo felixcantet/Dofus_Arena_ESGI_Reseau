@@ -6,24 +6,29 @@ using Photon.Pun;
 
 public class Character : MonoBehaviourPun, IPunObservable
 {
-    [Header("Character Informations")] public string name = "IronMan";
-    [SerializeField] Stats stats;
+    [Header("Character Informations")] 
+    public string name = "IronMan";
+    public Sprite characterIcon;
+    [SerializeField] public Stats stats;
 
-    public Stats PlayerStats
-    {
-        get => this.stats;
-        set => this.stats = value;
-    }
+   // public Stats PlayerStats
+   // {
+       // get => this.stats;
+   // }
 
-    [Header("Character Spells")] public List<BaseSpell> Spells = new List<BaseSpell>();
+    [Header("Character Spells")] 
+    public List<BaseSpell> Spells = new List<BaseSpell>();
     public int selectedSpell = 0;
 
-    [Header("Character State")] public CharacterState currentState = CharacterState.STATIC;
+    [Header("Character State")] 
+    public CharacterState currentState = CharacterState.STATIC;
 
-    [Header("Character Tiles Info")] public Tile position;
+    [Header("Character Tiles Info")] 
+    public Tile position;
     public List<Tile> moveableTiles = new List<Tile>();
 
-    [Header("Feedback")] public GameObject activeEffect;
+    [Header("Feedback")] 
+    public GameObject activeEffect;
 
     #region PUN Callbacks
 
@@ -32,16 +37,13 @@ public class Character : MonoBehaviourPun, IPunObservable
         if (stream.IsWriting)
         {
             // We own this player: send the others our data
-            stream.SendNext(this.stats.PM);
-            stream.SendNext(this.stats.PA);
-            stream.SendNext(this.stats.currentLife);
+            stream.SendNext(this.stats);
         }
-        else
+        
+        if(stream.IsReading)
         {
             // Network player, receive data
-            this.stats.PM = (int) stream.ReceiveNext();
-            this.stats.PA = (int) stream.ReceiveNext();
-            this.stats.currentLife = (int) stream.ReceiveNext();
+            this.stats = (Stats) stream.ReceiveNext();
         }
     }
 
@@ -54,9 +56,18 @@ public class Character : MonoBehaviourPun, IPunObservable
     [PunRPC]
     public void Damage(int damage)
     {
-        this.PlayerStats.currentLife -= damage;
+        this.stats.currentLife -= damage;
 
-        if (this.PlayerStats.currentLife <= 0)
+        BattleManager.Instance.photonView.RPC("DisplayTextEffect", RpcTarget.AllViaServer,
+            transform.position,
+            BattleManager.Instance.lifeTxtColor.r,
+            BattleManager.Instance.lifeTxtColor.g,
+            BattleManager.Instance.lifeTxtColor.b,
+            "-" + damage.ToString());
+        
+        Debug.LogError("Le personnage a perdu de la vie : " + damage + " actual pv : " + stats.currentLife);
+        
+        if (this.stats.currentLife <= 0)
         {
             currentState = CharacterState.DEAD;
             this.gameObject.SetActive(false);
@@ -70,7 +81,7 @@ public class Character : MonoBehaviourPun, IPunObservable
         if (spell != null)
         {
             int count = spell.spellActions.Count - 1;
-            //A Test, Pour chaque type, envoyer un battle log
+            
             foreach (var sa in spell.spellActions)
             {
                 Vector3 offset = 0.5f * count * Vector3.up;
@@ -79,7 +90,9 @@ public class Character : MonoBehaviourPun, IPunObservable
                 switch (sa.spellActionType)
                 {
                     case SpellActionType.DAMAGE:
-                        this.PlayerStats.currentLife += sa.value;
+                        this.stats.currentLife += sa.value;
+                        Debug.LogError("Le personnage a perdu de la vie : " + sa.value + " actual pv : " + stats.currentLife);
+                        
                         
                         BattleManager.Instance.photonView.RPC("DisplayTextEffect", RpcTarget.AllViaServer,
                             transform.position + offset,
@@ -96,8 +109,8 @@ public class Character : MonoBehaviourPun, IPunObservable
                         switch (sa.resource)
                         {
                             case ResourcesType.LIFE:
-                                this.PlayerStats.currentLife = Mathf.Clamp(this.stats.currentLife + sa.value, 0,
-                                    this.PlayerStats.MAX_LIFE);
+                                this.stats.currentLife = Mathf.Clamp(this.stats.currentLife + sa.value, 0,
+                                    this.stats.MAX_LIFE);
                                 
                                 BattleManager.Instance.photonView.RPC("DisplayTextEffect", RpcTarget.AllViaServer,
                                     transform.position + offset,
@@ -110,7 +123,7 @@ public class Character : MonoBehaviourPun, IPunObservable
                                 break;
 
                             case ResourcesType.PA:
-                                this.PlayerStats.PA = Mathf.Clamp(this.PlayerStats.PA + sa.value, 0, 30);
+                                this.stats.PA = Mathf.Clamp(this.stats.PA + sa.value, 0, 30);
                                 
                                 BattleManager.Instance.photonView.RPC("DisplayTextEffect", RpcTarget.AllViaServer,
                                     transform.position + offset,
@@ -123,7 +136,7 @@ public class Character : MonoBehaviourPun, IPunObservable
                                 break;
 
                             case ResourcesType.PM:
-                                this.PlayerStats.PM = Mathf.Clamp(this.PlayerStats.PM + sa.value, 0, 30);
+                                this.stats.PM = Mathf.Clamp(this.stats.PM + sa.value, 0, 30);
                                 
                                 BattleManager.Instance.photonView.RPC("DisplayTextEffect", RpcTarget.AllViaServer,
                                     transform.position + offset,
@@ -145,7 +158,7 @@ public class Character : MonoBehaviourPun, IPunObservable
             }
         }
 
-        if (this.PlayerStats.currentLife <= 0)
+        if (this.stats.currentLife <= 0)
         {
             //Battle log de mort
             string str = "<b>" + this.name + "</b>" + " est mort.";
@@ -314,7 +327,7 @@ public class Character : MonoBehaviourPun, IPunObservable
             switch (res.resourcesType)
             {
                 case ResourcesType.PA:
-                    this.PlayerStats.PA = Mathf.Clamp(this.PlayerStats.PA + res.cost, 0, 999);
+                    this.stats.PA = Mathf.Clamp(this.stats.PA + res.cost, 0, 999);
                     BattleManager.Instance.photonView.RPC("DisplayTextEffect", RpcTarget.AllViaServer,
                         transform.position + offset,
                         BattleManager.Instance.paTxtColor.r,
@@ -324,7 +337,7 @@ public class Character : MonoBehaviourPun, IPunObservable
                     break;
 
                 case ResourcesType.PM:
-                    this.PlayerStats.PM = Mathf.Clamp(this.PlayerStats.PM + res.cost, 0, 999);
+                    this.stats.PM = Mathf.Clamp(this.stats.PM + res.cost, 0, 999);
                     BattleManager.Instance.photonView.RPC("DisplayTextEffect", RpcTarget.AllViaServer,
                         transform.position + offset,
                         BattleManager.Instance.pmTxtColor.r,

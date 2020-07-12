@@ -13,7 +13,9 @@ MonoBehaviour:
   m_Name: Ellen_FlecheCurative
   m_EditorClassIdentifier: 
   spellName: Fleche Curative
+  spellId: 3
   spellDescription: 
+  spellIcon: {fileID: 21300000, guid: 5d1d51ce1560d254db60f4cb6c26cdaf, type: 3}
   spellType: 1
   spellRange: {x: 2, y: 4}
   spellCosts:

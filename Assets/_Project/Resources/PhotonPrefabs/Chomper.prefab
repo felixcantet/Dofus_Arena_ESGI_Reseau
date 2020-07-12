@@ -5275,6 +5275,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   name: Chomps
+  characterIcon: {fileID: 21300000, guid: 0cade8336b4e9a74abf8e3ed3b461544, type: 3}
   stats:
     PM: 4
     PA: 6

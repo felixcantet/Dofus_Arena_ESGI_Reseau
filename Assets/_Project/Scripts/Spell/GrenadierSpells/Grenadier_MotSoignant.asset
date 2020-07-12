@@ -13,7 +13,9 @@ MonoBehaviour:
   m_Name: Grenadier_MotSoignant
   m_EditorClassIdentifier: 
   spellName: Mot Soignant
+  spellId: 6
   spellDescription: 
+  spellIcon: {fileID: 21300000, guid: 411f88b287eb8504aa08edb04c1443c6, type: 3}
   spellType: 1
   spellRange: {x: 0, y: 4}
   spellCosts:
