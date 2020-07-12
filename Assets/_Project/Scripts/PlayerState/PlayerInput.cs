@@ -121,13 +121,17 @@ public class PlayerInput : MonoBehaviour
                                         BattleManager.Instance.timeline.ActiveCharacter.selectedSpell];
                                 
                                 PhotonNetwork.GetPhotonView(c.photonView.ViewID).RPC("CastSpell", RpcTarget.AllBuffered, spell);
-
+                                
+                                int count = spell.spellActions.Count - 1;
+                                
                                 foreach (var v in spell.spellActions)
                                 {
+                                    Vector3 offset = 0.5f * count * Vector3.up;
                                     switch (v.resource)
                                     {
                                         case ResourcesType.PA:
-                                            BattleManager.Instance.photonView.RPC("DisplayTextEffect", RpcTarget.AllBuffered, c.transform.position,
+                                            BattleManager.Instance.photonView.RPC("DisplayTextEffect", RpcTarget.AllBuffered, 
+                                                c.transform.position + offset,
                                                 0.0f,
                                                 0.25f,
                                                 0.78f,
@@ -135,7 +139,8 @@ public class PlayerInput : MonoBehaviour
                                             break;
                 
                                         case ResourcesType.PM:
-                                            BattleManager.Instance.photonView.RPC("DisplayTextEffect", RpcTarget.AllBuffered, c.transform.position,
+                                            BattleManager.Instance.photonView.RPC("DisplayTextEffect", RpcTarget.AllBuffered, 
+                                                c.transform.position + offset,
                                                 0.0f,
                                                 0.78f,
                                                 0.25f,
@@ -143,13 +148,17 @@ public class PlayerInput : MonoBehaviour
                                             break;
                 
                                         case ResourcesType.LIFE:
-                                            BattleManager.Instance.photonView.RPC("DisplayTextEffect", RpcTarget.AllBuffered, c.transform.position,
+                                            BattleManager.Instance.photonView.RPC("DisplayTextEffect", RpcTarget.AllBuffered, 
+                                                c.transform.position + offset,
                                                 BattleManager.Instance.textEffectPrefab.displayColor.r,
                                                 BattleManager.Instance.textEffectPrefab.displayColor.g,
                                                 BattleManager.Instance.textEffectPrefab.displayColor.b,
                                                 v.value.ToString());
                                             continue;
                                     }
+
+                                    count--;
+
                                 }
                                 
                                 

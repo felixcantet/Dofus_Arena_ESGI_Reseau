@@ -247,13 +247,18 @@ public class Character : MonoBehaviourPun, IPunObservable
         
         BaseSpell s = Spells[selectedSpell];
 
+
+        int count = s.spellCosts.Count - 1;
+        
         foreach (var res in s.spellCosts)
         {
+            Vector3 offset = 0.5f * count * Vector3.up;
+            
             switch (res.resourcesType)
             {
                 case ResourcesType.PA:
                     this.PlayerStats.PA = Mathf.Clamp(this.PlayerStats.PA + res.cost, 0, 999);
-                    BattleManager.Instance.photonView.RPC("DisplayTextEffect", RpcTarget.AllBuffered, transform.position,
+                    BattleManager.Instance.photonView.RPC("DisplayTextEffect", RpcTarget.AllBuffered, transform.position + offset,
                         0.0f,
                         0.25f,
                         0.78f,
@@ -262,7 +267,7 @@ public class Character : MonoBehaviourPun, IPunObservable
                         
                 case ResourcesType.PM:
                     this.PlayerStats.PM = Mathf.Clamp(this.PlayerStats.PM + res.cost, 0, 999);
-                    BattleManager.Instance.photonView.RPC("DisplayTextEffect", RpcTarget.AllBuffered, transform.position,
+                    BattleManager.Instance.photonView.RPC("DisplayTextEffect", RpcTarget.AllBuffered, transform.position + offset,
                         0.0f,
                         0.78f,
                         0.25f,
@@ -271,13 +276,15 @@ public class Character : MonoBehaviourPun, IPunObservable
                
                 case ResourcesType.LIFE:
                     stats.currentLife += res.cost;
-                    BattleManager.Instance.photonView.RPC("DisplayTextEffect", RpcTarget.AllBuffered, transform.position,
+                    BattleManager.Instance.photonView.RPC("DisplayTextEffect", RpcTarget.AllBuffered, transform.position + offset,
                         BattleManager.Instance.textEffectPrefab.displayColor.r,
                         BattleManager.Instance.textEffectPrefab.displayColor.g,
                         BattleManager.Instance.textEffectPrefab.displayColor.b,
                         res.cost.ToString());
                     break;
             }
+
+            count--;
         }
         
         StartCoroutine(nameof(DelayAttack));
