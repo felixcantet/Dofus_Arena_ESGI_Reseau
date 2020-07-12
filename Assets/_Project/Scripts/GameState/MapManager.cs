@@ -155,11 +155,11 @@ public class MapManager : NetworkSingleton<MapManager>, IPunObservable
 
                 int dist = calX + calY;
                 
-                Debug.Log("la tile se trouve a : " + dist + " pour X = " + calX + " et Y = " + calY);
+                //Debug.Log("la tile se trouve a : " + dist + " pour X = " + calX + " et Y = " + calY);
                 
                 if (dist <= range.y)
                 {
-                    Debug.Log("j'ajoute la tile !");
+                    //Debug.Log("j'ajoute la tile !");
                     tiles.Add(neig);
                 }
             }
@@ -183,7 +183,7 @@ public class MapManager : NetworkSingleton<MapManager>, IPunObservable
             
             if (dist >= range.x)
             {
-                Debug.Log("j'ajoute la tile !");
+                //Debug.Log("j'ajoute la tile !");
                 finalTiles.Add(tile);
             }
         }

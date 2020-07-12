@@ -6190,9 +6190,14 @@ MonoBehaviour:
     defaultPA: 6
     attackRange: {x: 1, y: 4}
     damage: 50
+  Spells:
+  - {fileID: 11400000, guid: a8ab359bc6c03e040b2956edd08df4f1, type: 2}
+  - {fileID: 11400000, guid: 06b50da1c86911644b6fbbd0541c80d5, type: 2}
+  - {fileID: 11400000, guid: e7a6f653e53f8644093ccdac735901bd, type: 2}
+  selectedSpell: 0
+  currentState: 0
   position: {fileID: 0}
   moveableTiles: []
-  currentState: 0
   activeEffect: {fileID: 1137469514988140065}
 --- !u!136 &2459390820894299742
 CapsuleCollider:

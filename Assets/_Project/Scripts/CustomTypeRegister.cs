@@ -7,5 +7,6 @@ public class CustomTypeRegister : MonoBehaviour
     private void Awake()
     {
         Team.Register();
+        BaseSpell.Register();
     }
 }

@@ -1,0 +1,27 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ebdfaa9171fb2b545aec93b9187bada3, type: 3}
+  m_Name: Ellen_FlecheCurative
+  m_EditorClassIdentifier: 
+  spellName: Fleche Curative
+  spellDescription: 
+  spellType: 1
+  spellRange: {x: 2, y: 4}
+  spellCosts:
+  - resourcesType: 0
+    cost: -4
+  - resourcesType: 1
+    cost: -1
+  spellActions:
+  - spellActionType: 1
+    value: 30
+    resource: 2

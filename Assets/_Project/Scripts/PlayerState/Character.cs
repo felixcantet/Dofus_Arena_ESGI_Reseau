@@ -5,19 +5,27 @@ using Sirenix.OdinInspector;
 using Photon.Pun;
 public class Character : MonoBehaviourPun, IPunObservable
 {
+    [Header("Character Informations")]
     public string name = "IronMan";
     [SerializeField] Stats stats;
-    public Tile position;
     public Stats PlayerStats
     {
         get => this.stats;
         set => this.stats = value;
     }
+
+    [Header("Character Spells")] 
+    public List<BaseSpell> Spells = new List<BaseSpell>();
+    public int selectedSpell = 0;
     
+    [Header("Character State")]
+    public CharacterState currentState = CharacterState.STATIC;
+    
+    [Header("Character Tiles Info")]
+    public Tile position;
     public List<Tile> moveableTiles = new List<Tile>();
 
-    public CharacterState currentState = CharacterState.STATIC;
-
+    [Header("Feedback")]
     public GameObject activeEffect;
     
     public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
@@ -57,6 +65,45 @@ public class Character : MonoBehaviourPun, IPunObservable
         }
     }
 
+    [PunRPC]
+    public void CastSpell(BaseSpell spell)
+    {
+        foreach (var sa in spell.spellActions)
+        {
+            switch (sa.spellActionType)
+            {
+                case SpellActionType.DAMAGE:
+                    this.PlayerStats.currentLife += sa.value;
+                    break;
+                        
+                case SpellActionType.MODIFY_RESSOURCES:
+                    //Switch entre si ca boost pa ou pm
+                    switch (sa.resource)
+                    {
+                        case ResourcesType.LIFE:
+                            this.PlayerStats.currentLife += sa.value;
+                            break;
+                        
+                        case ResourcesType.PA:
+                            this.PlayerStats.PA = Mathf.Clamp(this.PlayerStats.PA + sa.value, 0, 999);
+                            break;
+                        
+                        case ResourcesType.PM:
+                            this.PlayerStats.PM = Mathf.Clamp(this.PlayerStats.PM + sa.value, 0, 999);
+                            break;
+                    }
+                    break;
+            }
+        }
+        
+        if (this.PlayerStats.currentLife <= 0)
+        {
+            currentState = CharacterState.DEAD;
+            this.gameObject.SetActive(false);
+            BattleManager.Instance.timeline.RemoveCharacterFromTimeline(this);
+        }
+    }
+    
     [PunRPC]
     public void SetCurrentTile(int tileID)
     {
@@ -170,13 +217,18 @@ public class Character : MonoBehaviourPun, IPunObservable
             SearchMoveableTile(new Vector2Int(1, stats.PM));
     }
     
-    public void SwitchToAttackStateToStaticState()
+    public void SwitchToAttackStateToStaticState(int spellId)
     {
         currentState = currentState == CharacterState.ATTACK_MODE ? CharacterState.STATIC : CharacterState.ATTACK_MODE;
+        
+        selectedSpell = spellId;
+        
+        Debug.Log("Spell " + spellId.ToString() + " Chosen --- Character");
+        
         switch (currentState)
         {
             case CharacterState.ATTACK_MODE:
-                SearchMoveableTile(stats.ATTAQUE_RANGE, true);
+                SearchMoveableTile(Spells[selectedSpell].spellRange, true);
                 break;
             
             case CharacterState.STATIC:
@@ -192,14 +244,49 @@ public class Character : MonoBehaviourPun, IPunObservable
             return;
             
         currentState = CharacterState.ATTACK_PROCESS;
-        PlayerStats.PA -= 3;
+        
+        BaseSpell s = Spells[selectedSpell];
+
+        foreach (var res in s.spellCosts)
+        {
+            switch (res.resourcesType)
+            {
+                case ResourcesType.PA:
+                    stats.PA += res.cost;
+                    BattleManager.Instance.photonView.RPC("DisplayTextEffect", RpcTarget.AllBuffered, transform.position,
+                        0.0f,
+                        0.25f,
+                        0.78f,
+                        res.cost.ToString() + " PA");
+                    break;
+                
+                case ResourcesType.PM:
+                    stats.PM += res.cost;
+                    BattleManager.Instance.photonView.RPC("DisplayTextEffect", RpcTarget.AllBuffered, transform.position,
+                        0.0f,
+                        0.78f,
+                        0.25f,
+                        res.cost.ToString() + " PM");
+                    break;
+                
+                case ResourcesType.LIFE:
+                    stats.currentLife += res.cost;
+                    BattleManager.Instance.photonView.RPC("DisplayTextEffect", RpcTarget.AllBuffered, transform.position,
+                        BattleManager.Instance.textEffectPrefab.displayColor.r,
+                        BattleManager.Instance.textEffectPrefab.displayColor.g,
+                        BattleManager.Instance.textEffectPrefab.displayColor.b,
+                        res.cost.ToString());
+                    break;
+            }
+        }
+        
         StartCoroutine(nameof(DelayAttack));
         
-        BattleManager.Instance.photonView.RPC("DisplayTextEffect", RpcTarget.AllBuffered, transform.position,
-            0.0f,
-            0.25f,
-            0.78f,
-            "-" + 3 + " PA");
+        // BattleManager.Instance.photonView.RPC("DisplayTextEffect", RpcTarget.AllBuffered, transform.position,
+        //     0.0f,
+        //     0.25f,
+        //     0.78f,
+        //     "-" + 3 + " PA");
     }
 
     IEnumerator DelayAttack()
@@ -210,6 +297,32 @@ public class Character : MonoBehaviourPun, IPunObservable
         SearchMoveableTile(new Vector2Int(1, stats.PM));
         
         yield break;
+    }
+
+    public bool ResourcesAvailable()
+    {
+        BaseSpell s = Spells[selectedSpell];
+
+        foreach (var res in s.spellCosts)
+        {
+            switch (res.resourcesType)
+            {
+                case ResourcesType.PA:
+                    if (stats.PA < res.cost)
+                        return false;
+                    break;
+                
+                case ResourcesType.PM:
+                    if (stats.PM < res.cost)
+                        return false;
+                    break;
+                
+                case ResourcesType.LIFE:
+                    continue;
+            }
+        }
+        
+        return true;
     }
 }
 

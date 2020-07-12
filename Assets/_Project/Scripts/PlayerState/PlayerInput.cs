@@ -49,7 +49,7 @@ public class PlayerInput : MonoBehaviour
                     if (tile != null && BattleManager.Instance.timeline.ActiveCharacter.PlayerStats.PM > 0)
                     {
                         var path = MapManager.GetPath(startTile, tile);
-                        Debug.Log(path.Count);
+                        //Debug.Log(path.Count);
                         while(path.Count != 0)
                         {
                             path.Pop().SetColor(Color.cyan);
@@ -62,10 +62,11 @@ public class PlayerInput : MonoBehaviour
                     
                     break;
                 
+                // TODO : change with new spell system
                 case CharacterState.ATTACK_MODE:
                     if (Input.GetMouseButtonDown(1))
                     {
-                        BattleManager.Instance.timeline.ActiveCharacter.SwitchToAttackStateToStaticState();
+                        BattleManager.Instance.timeline.ActiveCharacter.SwitchToAttackStateToStaticState(0);
                     }
                     
                     foreach(var item in MapManager.Instance.map)
@@ -84,7 +85,13 @@ public class PlayerInput : MonoBehaviour
                         {
                             if (BattleManager.Instance.timeline.ActiveCharacter.PlayerStats.PA < 3)
                             {
-                                BattleManager.Instance.timeline.ActiveCharacter.SwitchToAttackStateToStaticState();
+                                BattleManager.Instance.timeline.ActiveCharacter.SwitchToAttackStateToStaticState(0);
+                                return;
+                            }
+                            
+                            if (!BattleManager.Instance.timeline.ActiveCharacter.ResourcesAvailable())
+                            {
+                                BattleManager.Instance.timeline.ActiveCharacter.SwitchToAttackStateToStaticState(0);
                                 return;
                             }
                             
@@ -106,14 +113,47 @@ public class PlayerInput : MonoBehaviour
 
                             if (c != null)
                             {
-                                PhotonNetwork.GetPhotonView(c.photonView.ViewID).RPC("Damage", 
-                                    RpcTarget.AllBuffered, BattleManager.Instance.timeline.ActiveCharacter.PlayerStats.DAMAGE);
+                                //PhotonNetwork.GetPhotonView(c.photonView.ViewID).RPC("Damage", 
+                                //    RpcTarget.AllBuffered, BattleManager.Instance.timeline.ActiveCharacter.PlayerStats.DAMAGE);
+
+                                BaseSpell spell =
+                                    BattleManager.Instance.timeline.ActiveCharacter.Spells[
+                                        BattleManager.Instance.timeline.ActiveCharacter.selectedSpell];
                                 
-                                BattleManager.Instance.photonView.RPC("DisplayTextEffect", RpcTarget.AllBuffered, c.transform.position,
-                                    BattleManager.Instance.textEffectPrefab.displayColor.r,
-                                    BattleManager.Instance.textEffectPrefab.displayColor.g,
-                                    BattleManager.Instance.textEffectPrefab.displayColor.b,
-                                    "-" +  BattleManager.Instance.timeline.ActiveCharacter.PlayerStats.DAMAGE.ToString());
+                                PhotonNetwork.GetPhotonView(c.photonView.ViewID).RPC("CastSpell", RpcTarget.AllBuffered, spell);
+
+                                foreach (var v in spell.spellActions)
+                                {
+                                    switch (v.resource)
+                                    {
+                                        case ResourcesType.PA:
+                                            BattleManager.Instance.photonView.RPC("DisplayTextEffect", RpcTarget.AllBuffered, c.transform.position,
+                                                0.0f,
+                                                0.25f,
+                                                0.78f,
+                                                v.value.ToString());
+                                            break;
+                
+                                        case ResourcesType.PM:
+                                            BattleManager.Instance.photonView.RPC("DisplayTextEffect", RpcTarget.AllBuffered, c.transform.position,
+                                                0.0f,
+                                                0.78f,
+                                                0.25f,
+                                                v.value.ToString());
+                                            break;
+                
+                                        case ResourcesType.LIFE:
+                                            BattleManager.Instance.photonView.RPC("DisplayTextEffect", RpcTarget.AllBuffered, c.transform.position,
+                                                BattleManager.Instance.textEffectPrefab.displayColor.r,
+                                                BattleManager.Instance.textEffectPrefab.displayColor.g,
+                                                BattleManager.Instance.textEffectPrefab.displayColor.b,
+                                                v.value.ToString());
+                                            continue;
+                                    }
+                                }
+                                
+                                
+                                
                             }
                             
                             BattleManager.Instance.timeline.ActiveCharacter.SetAttackProcess();
@@ -125,11 +165,6 @@ public class PlayerInput : MonoBehaviour
                     
                     break;
             }
-            
-            if (BattleManager.Instance.timeline.ActiveCharacter.currentState != CharacterState.STATIC)
-                return;
-            
-            
         }
     }
 
@@ -145,7 +180,7 @@ public class PlayerInput : MonoBehaviour
             if (!BattleManager.Instance.timeline.ActiveCharacter.moveableTiles.Contains(tile))
                 return null;
 
-            if (tile.used)
+            if (tile.used && BattleManager.Instance.timeline.ActiveCharacter.currentState != CharacterState.ATTACK_MODE)
                 return null;
             
             return tile;

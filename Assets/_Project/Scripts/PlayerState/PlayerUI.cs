@@ -127,7 +127,7 @@ public class PlayerUI : MonoBehaviour
         selectedCharacter = id;
     }
     
-    public void SelectAttack()
+    public void SelectAttack(int spellId)
     {
         if (!BattleManager.Instance.timeline.ActiveCharacter.photonView.IsMine)
             return;
@@ -135,8 +135,11 @@ public class PlayerUI : MonoBehaviour
         if (BattleManager.Instance.timeline.ActiveCharacter.currentState != CharacterState.STATIC)
             return;
         
-        BattleManager.Instance.timeline.ActiveCharacter.SwitchToAttackStateToStaticState();
+        Debug.Log("Spell " + spellId.ToString() + " Chosen --- Player UI");
+        
+        BattleManager.Instance.timeline.ActiveCharacter.SwitchToAttackStateToStaticState(spellId);
         //call function
     }
+    
     
 }
