@@ -293,8 +293,10 @@ public class Character : MonoBehaviourPun, IPunObservable
         //Enable effect
         activeEffect.SetActive(isActive);
 
+        moveableTiles.Clear();
+        
         //Search range
-        if (isActive == true)
+        if (isActive == true && photonView.IsMine)
             SearchMoveableTile(new Vector2Int(1, stats.PM), false);
     }
 

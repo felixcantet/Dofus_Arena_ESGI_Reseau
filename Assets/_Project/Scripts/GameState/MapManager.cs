@@ -89,11 +89,15 @@ public class MapManager : NetworkSingleton<MapManager>, IPunObservable
 
             foreach (var item in tile.neighbours)
             {
+                if (item.tileType == TileType.OBSTACLE)
+                    continue;
+
+                if (item.tileType == TileType.OBSTACLE_VIDE)
+                    continue;
+                
                 if(item.used)
                     continue;
                 
-                if (item.tileType != TileType.NORMAL)
-                    continue;
                 
                 if (!tileFlags[item].discovered)
                 {
@@ -113,7 +117,9 @@ public class MapManager : NetworkSingleton<MapManager>, IPunObservable
             if (safety == 20)
                 break;
 
-            path.Push(currentTile);
+            if (currentTile.tileType == TileType.NORMAL && !currentTile.used)
+                path.Push(currentTile);
+            
 //            Debug.Log(tileFlags[currentTile].parent);
             if(tileFlags[currentTile].parent != null)
                 currentTile = tileFlags[currentTile].parent;

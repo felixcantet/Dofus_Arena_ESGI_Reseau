@@ -140,6 +140,13 @@ public class PlayerInput : MonoBehaviour
                     break;
             }
         }
+        else
+        {
+            foreach(var item in MapManager.Instance.map)
+            {
+                item.SetColor(Color.white);
+            }
+        }
     }
 
     private Tile GetTileUnderMouse()

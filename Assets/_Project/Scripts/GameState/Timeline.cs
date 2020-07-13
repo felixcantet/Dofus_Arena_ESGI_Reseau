@@ -36,9 +36,9 @@ public class Timeline
     {
         var oldChara = ActiveCharacter;
         oldChara.SetActiveCharacter(false);
-        //oldChara.GetComponent<Renderer>().material.color = Color.white;
+        
         this.timeline.Enqueue(this.timeline.Dequeue());
-        //ActiveCharacter.GetComponent<Renderer>().material.color = Color.red;
+        
         Debug.Log(ActiveCharacter.name);
         
         ActiveCharacter.SetActiveCharacter(true);
