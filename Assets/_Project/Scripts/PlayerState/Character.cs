@@ -154,7 +154,8 @@ public class Character : MonoBehaviourPun, IPunObservable
 
                 count--;
                 
-                BattleManager.Instance.photonView.RPC("AddBattleLog", RpcTarget.AllViaServer, str);
+                if(photonView.IsMine)
+                    BattleManager.Instance.photonView.RPC("AddBattleLog", RpcTarget.AllViaServer, str);
             }
         }
 
@@ -162,7 +163,8 @@ public class Character : MonoBehaviourPun, IPunObservable
         {
             //Battle log de mort
             string str = "<b>" + this.name + "</b>" + " est mort.";
-            BattleManager.Instance.photonView.RPC("AddBattleLog", RpcTarget.AllViaServer, str);
+            if(photonView.IsMine)
+                BattleManager.Instance.photonView.RPC("AddBattleLog", RpcTarget.AllViaServer, str);
             
             currentState = CharacterState.DEAD;
             this.gameObject.SetActive(false);
