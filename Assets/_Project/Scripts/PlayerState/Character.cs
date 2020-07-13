@@ -167,8 +167,14 @@ public class Character : MonoBehaviourPun, IPunObservable
                 BattleManager.Instance.photonView.RPC("AddBattleLog", RpcTarget.AllViaServer, str);
             
             currentState = CharacterState.DEAD;
+
+            position.used = false;
+            
             this.gameObject.SetActive(false);
+            
             BattleManager.Instance.timeline.RemoveCharacterFromTimeline(this);
+            
+            BattleManager.Instance.CheckVictoryCondition();
         }
     }
 
@@ -256,13 +262,16 @@ public class Character : MonoBehaviourPun, IPunObservable
             yield return 0;
         }
 
-        currentState = CharacterState.STATIC;
 
         var tileID = tmp.photonView.ViewID;
         PhotonNetwork.GetPhotonView(photonView.ViewID).RPC("SetCurrentTile", RpcTarget.AllBuffered, tileID);
-
+        
+        yield return new WaitForSeconds(0.2f);
+        
         SearchMoveableTile(new Vector2Int(1, stats.PM), false);
 
+        currentState = CharacterState.STATIC;
+        
         yield break;
     }
 
@@ -285,8 +294,8 @@ public class Character : MonoBehaviourPun, IPunObservable
         activeEffect.SetActive(isActive);
 
         //Search range
-        if (isActive)
-            SearchMoveableTile(new Vector2Int(1, stats.PM));
+        if (isActive == true)
+            SearchMoveableTile(new Vector2Int(1, stats.PM), false);
     }
 
     public void SwitchToAttackStateToStaticState(int spellId)

@@ -134,7 +134,7 @@ public class BattleManager : NetworkSingleton<BattleManager>, IPunObservable
                 break;
         }
 
-        if (photonView.IsMine)
+        if (PhotonNetwork.IsMasterClient)
             StartCoroutine(nameof(Chrono));
     }
 
@@ -178,6 +178,37 @@ public class BattleManager : NetworkSingleton<BattleManager>, IPunObservable
     {
         BaseSpell spell = spellsBank[spellId];
         PhotonNetwork.GetPhotonView(photonId).GetComponent<Character>().CastSpell(spell);
+    }
+
+    public void CheckVictoryCondition()
+    {
+        if (timeline.timeline.Count > 3)
+            return;
+        
+        int countTeamA = 0;
+        int countTeamB = 0;
+
+        for (int i = 0; i < teams.Count; i++)
+        {
+            for (int j = 0; j < teams[i].characters.Count; j++)
+            {
+                if(teams[i].characters[j].currentState != CharacterState.DEAD)
+                    if (i == 0)
+                        countTeamA++;
+                    else
+                        countTeamB++;
+            }
+        }
+
+        if (countTeamA > countTeamB && countTeamB == 0)
+        {
+            Debug.LogError("La team A a gagné !");
+        }
+        else if (countTeamB > countTeamA && countTeamA == 0)
+        {
+            //victory team B
+            Debug.LogError("La team B a gagné !");
+        }
     }
     #endregion
     

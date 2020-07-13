@@ -4,9 +4,10 @@ using System.Collections.Generic;
 using UnityEngine;
 using Photon.Pun;
 using TMPro;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class PlayerUI : MonoBehaviour
+public class PlayerUI : MonoBehaviour, IPointerEnterHandler
 {
     [Header("Character Icon")]
     public Image[] teamA = new Image[0];
@@ -74,6 +75,7 @@ public class PlayerUI : MonoBehaviour
 
     public static void NextTurnAfterTimer()
     {
+        Debug.LogError("Je suis call ---- > ");
         {
             foreach(var item in MapManager.Instance.map)
             {
@@ -145,7 +147,9 @@ public class PlayerUI : MonoBehaviour
             
             timerText.text = "00";
         }
-        
+
+        Button a;
+
     }
 
     public void SelectCharacter(int id)
@@ -172,6 +176,12 @@ public class PlayerUI : MonoBehaviour
         BattleManager.Instance.timeline.ActiveCharacter.SwitchToAttackStateToStaticState(spellId);
         //call function
     }
-    
-    
+
+
+    public void OnPointerEnter(PointerEventData eventData)
+    {
+        //eventData.selectedObject
+        //Switch sur les different button pour afficher le bon text a la bonne position
+        
+    }
 }
