@@ -191,13 +191,28 @@ public class MapManager : NetworkSingleton<MapManager>, IPunObservable
                 finalTiles.Add(tile);
             }
         }
+
+        tiles = finalTiles;
         
         //Check ligne de vue
         if (rangeForAttack)
         {
             
         }
-        
+        else
+        {
+            for (int i = 0; i < tiles.Count; i++)
+            {
+                var path = GetPath(startPos, tiles[i]);
+                if (path.Count >= (range.x + range.y))
+                {
+                    Debug.LogWarning("Count : " + path.Count + " from : " + startPos + " to : " + tiles[i]);
+                    finalTiles.Remove(tiles[i]);
+                }
+
+            }
+        }
+
         return finalTiles;
     }
 }
