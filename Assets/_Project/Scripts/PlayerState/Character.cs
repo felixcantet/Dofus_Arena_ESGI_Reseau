@@ -261,7 +261,7 @@ public class Character : MonoBehaviourPun, IPunObservable
         var tileID = tmp.photonView.ViewID;
         PhotonNetwork.GetPhotonView(photonView.ViewID).RPC("SetCurrentTile", RpcTarget.AllBuffered, tileID);
 
-        SearchMoveableTile(new Vector2Int(1, stats.PM));
+        SearchMoveableTile(new Vector2Int(1, stats.PM), false);
 
         yield break;
     }
@@ -374,7 +374,7 @@ public class Character : MonoBehaviourPun, IPunObservable
         yield return new WaitForSeconds(1.5f);
 
         currentState = CharacterState.STATIC;
-        SearchMoveableTile(new Vector2Int(1, stats.PM));
+        SearchMoveableTile(new Vector2Int(1, stats.PM), false);
 
         yield break;
     }

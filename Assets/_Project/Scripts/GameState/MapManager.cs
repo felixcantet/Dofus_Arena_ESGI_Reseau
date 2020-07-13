@@ -197,7 +197,30 @@ public class MapManager : NetworkSingleton<MapManager>, IPunObservable
         //Check ligne de vue
         if (rangeForAttack)
         {
+            Vector3 depart = new Vector3(startPos.position.x, 1.0f, startPos.position.y);
+
+            Character current = BattleManager.Instance.timeline.ActiveCharacter;
+            current.GetComponent<Collider>().enabled = false;
             
+            RaycastHit hit;
+            
+            for (int i = 0; i < tiles.Count; i++)
+            {
+                Vector3 arriver = new Vector3(tiles[i].position.x, 1.0f, tiles[i].position.y);
+                Vector3 dir = (arriver - depart);
+                
+                
+                if (Physics.SphereCast(depart, 0.05f,dir.normalized, out hit, dir.magnitude))
+                {
+                    if(hit.transform.TryGetComponent<Character>(out Character c))
+                        if(c.position.Equals(tiles[i]))
+                            continue;
+
+                    finalTiles.Remove(tiles[i]);
+                }
+            }
+            
+            current.GetComponent<Collider>().enabled = true;
         }
         else
         {

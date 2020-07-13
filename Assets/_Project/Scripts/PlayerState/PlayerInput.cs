@@ -68,6 +68,7 @@ public class PlayerInput : MonoBehaviour
                     if (Input.GetMouseButtonDown(1))
                     {
                         BattleManager.Instance.timeline.ActiveCharacter.SwitchToAttackStateToStaticState(0);
+                        return;
                     }
                     
                     foreach(var item in MapManager.Instance.map)

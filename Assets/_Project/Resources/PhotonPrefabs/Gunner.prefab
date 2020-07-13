@@ -4799,7 +4799,7 @@ GameObject:
   - component: {fileID: 3706577101536415019}
   - component: {fileID: -2168614158198679844}
   - component: {fileID: 7828708072719757817}
-  - component: {fileID: 4336994869946765027}
+  - component: {fileID: 331979914127200811}
   m_Layer: 0
   m_Name: Gunner
   m_TagString: Untagged
@@ -4922,6 +4922,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   name: Gunner
+  characterIcon: {fileID: 0}
   stats:
     PM: 4
     PA: 6
@@ -4929,14 +4930,14 @@ MonoBehaviour:
     maxLife: 200
     defaultPM: 4
     defaultPA: 6
-    attackRange: {x: 1, y: 4}
-    damage: 50
+  Spells: []
+  selectedSpell: 0
+  currentState: 0
   position: {fileID: 0}
   moveableTiles: []
-  currentState: 0
   activeEffect: {fileID: 6577959864697536623}
---- !u!136 &4336994869946765027
-CapsuleCollider:
+--- !u!65 &331979914127200811
+BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -4945,7 +4946,6 @@ CapsuleCollider:
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Enabled: 1
-  m_Radius: 1.1
-  m_Height: 3.5025904
-  m_Direction: 1
-  m_Center: {x: 0, y: 1.7227825, z: 0.06370497}
+  serializedVersion: 2
+  m_Size: {x: 0.8, y: 2, z: 0.8}
+  m_Center: {x: 0, y: 1, z: 0}

@@ -4798,7 +4798,7 @@ GameObject:
   - component: {fileID: 6578979010123101392}
   - component: {fileID: -4820274405701719514}
   - component: {fileID: 8731304252235900832}
-  - component: {fileID: 5677688875457600270}
+  - component: {fileID: 4073470061901849852}
   m_Layer: 0
   m_Name: Spitter
   m_TagString: Untagged
@@ -4893,6 +4893,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   name: Spitter
+  characterIcon: {fileID: 0}
   stats:
     PM: 4
     PA: 6
@@ -4900,14 +4901,14 @@ MonoBehaviour:
     maxLife: 200
     defaultPM: 4
     defaultPA: 6
-    attackRange: {x: 2, y: 8}
-    damage: 50
+  Spells: []
+  selectedSpell: 0
+  currentState: 0
   position: {fileID: 0}
   moveableTiles: []
-  currentState: 0
   activeEffect: {fileID: 8119910934110354554}
---- !u!136 &5677688875457600270
-CapsuleCollider:
+--- !u!65 &4073470061901849852
+BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -4916,10 +4917,9 @@ CapsuleCollider:
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Enabled: 1
-  m_Radius: 0.5
-  m_Height: 1.59
-  m_Direction: 2
-  m_Center: {x: 0, y: 0.44, z: 0}
+  serializedVersion: 2
+  m_Size: {x: 0.8, y: 2, z: 0.8}
+  m_Center: {x: 0, y: 1, z: 0}
 --- !u!1 &9146027532441612674
 GameObject:
   m_ObjectHideFlags: 0

@@ -3508,7 +3508,7 @@ GameObject:
   - component: {fileID: 7235393878185774870}
   - component: {fileID: -4467221455011303423}
   - component: {fileID: 2684682423203261695}
-  - component: {fileID: 3983352244231256067}
+  - component: {fileID: 3233368366650678745}
   m_Layer: 0
   m_Name: Ellen
   m_TagString: Untagged
@@ -3620,8 +3620,8 @@ MonoBehaviour:
   position: {fileID: 0}
   moveableTiles: []
   activeEffect: {fileID: 7742935887483738315}
---- !u!136 &3983352244231256067
-CapsuleCollider:
+--- !u!65 &3233368366650678745
+BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -3630,10 +3630,9 @@ CapsuleCollider:
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Enabled: 1
-  m_Radius: 0.25
-  m_Height: 1.72
-  m_Direction: 1
-  m_Center: {x: 0, y: 0.85, z: 0}
+  serializedVersion: 2
+  m_Size: {x: 0.8, y: 2, z: 0.8}
+  m_Center: {x: 0, y: 1, z: 0}
 --- !u!1 &5546910188673666553
 GameObject:
   m_ObjectHideFlags: 0

@@ -5180,7 +5180,7 @@ GameObject:
   - component: {fileID: 4002524015505119458}
   - component: {fileID: -991329737840681656}
   - component: {fileID: 8533621302503981791}
-  - component: {fileID: 7387321284756565419}
+  - component: {fileID: 2003783162874742370}
   m_Layer: 0
   m_Name: Chomper
   m_TagString: Untagged
@@ -5292,8 +5292,8 @@ MonoBehaviour:
   position: {fileID: 0}
   moveableTiles: []
   activeEffect: {fileID: 3192692644034565054}
---- !u!136 &7387321284756565419
-CapsuleCollider:
+--- !u!65 &2003783162874742370
+BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -5302,10 +5302,9 @@ CapsuleCollider:
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Enabled: 1
-  m_Radius: 0.5
-  m_Height: 1.83
-  m_Direction: 2
-  m_Center: {x: 0, y: 0.4, z: 0}
+  serializedVersion: 2
+  m_Size: {x: 0.8, y: 2, z: 0.8}
+  m_Center: {x: 0, y: 1, z: 0}
 --- !u!1 &5574463293909814842
 GameObject:
   m_ObjectHideFlags: 0
