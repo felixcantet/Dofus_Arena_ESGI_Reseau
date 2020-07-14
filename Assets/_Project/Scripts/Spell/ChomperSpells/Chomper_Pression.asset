@@ -14,7 +14,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   spellName: Pression
   spellId: 1
-  spellDescription: //
+  spellDescription: 'PO : 1 - 3
+
+    Cost : 3PA
+
+    Effet : -60 Damage'
   spellIcon: {fileID: 21300000, guid: d0ede9f0d5392aa4a881d4b95ec7514f, type: 3}
   spellType: 0
   spellRange: {x: 1, y: 3}

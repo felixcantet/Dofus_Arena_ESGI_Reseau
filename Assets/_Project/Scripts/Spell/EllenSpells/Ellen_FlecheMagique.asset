@@ -14,7 +14,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   spellName: Fleche Magique
   spellId: 5
-  spellDescription: Spell Test Description
+  spellDescription: 'PO : 1 - 5
+
+    Cost : 3PA
+
+    Effet : -30 Damage'
   spellIcon: {fileID: 21300000, guid: 495b165e4f96ef14fb23cd71fa625a47, type: 3}
   spellType: 0
   spellRange: {x: 1, y: 5}

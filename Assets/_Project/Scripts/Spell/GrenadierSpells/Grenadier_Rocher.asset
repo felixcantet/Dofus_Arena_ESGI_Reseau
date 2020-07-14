@@ -14,7 +14,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   spellName: Rocher
   spellId: 7
-  spellDescription: --
+  spellDescription: 'PO : 2 - 6
+
+    Cost : 3PA
+
+    Effet : -40 Damage'
   spellIcon: {fileID: 21300000, guid: 2d0997ac1b1fd664e98202450e7ea2d7, type: 3}
   spellType: 0
   spellRange: {x: 2, y: 6}

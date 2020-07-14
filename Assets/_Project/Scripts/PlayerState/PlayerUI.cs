@@ -7,7 +7,7 @@ using TMPro;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class PlayerUI : MonoBehaviour, IPointerEnterHandler
+public class PlayerUI : MonoBehaviour
 {
     [Header("Character Icon")]
     public Image[] teamA = new Image[0];
@@ -175,13 +175,5 @@ public class PlayerUI : MonoBehaviour, IPointerEnterHandler
         
         BattleManager.Instance.timeline.ActiveCharacter.SwitchToAttackStateToStaticState(spellId);
         //call function
-    }
-
-
-    public void OnPointerEnter(PointerEventData eventData)
-    {
-        //eventData.selectedObject
-        //Switch sur les different button pour afficher le bon text a la bonne position
-        
     }
 }
